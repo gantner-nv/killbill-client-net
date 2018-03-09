@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using KillBill.Client.Net.Configuration;
 using KillBill.Client.Net.Data;
 using KillBill.Client.Net.Infrastructure;
 using RestSharp;
@@ -8,6 +9,8 @@ namespace KillBill.Client.Net.Interfaces
 {
     public interface IKbHttpClient
     {
+        KillBillConfiguration Configuration { get; }
+
         IRestResponse Get(string uri, RequestOptions requestOptions);
 
         T Get<T>(string uri, RequestOptions requestOptions)

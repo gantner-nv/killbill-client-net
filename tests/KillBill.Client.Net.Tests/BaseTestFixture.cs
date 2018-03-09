@@ -28,10 +28,9 @@ namespace KillBill.Client.Net.Tests
                 HttpUser = "admin",
                 HttpPassword = "password"
             };
-            var configurationOptions = Options.Create<KillBillConfiguration>(Configuration);
 
-            IKbHttpClient httpClient = new KillBillHttpClient(configurationOptions);
-            _client = new KillBillClient(httpClient, configurationOptions);
+            IKbHttpClient httpClient = new KillBillHttpClient(Configuration);
+            _client = new KillBillClient(httpClient);
 
             _requestOptions = RequestOptions.Builder()
                                             .WithRequestId(Guid.NewGuid().ToString())

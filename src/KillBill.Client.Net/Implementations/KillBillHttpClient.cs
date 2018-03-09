@@ -9,7 +9,6 @@ using KillBill.Client.Net.Infrastructure;
 using KillBill.Client.Net.Interfaces;
 using KillBill.Client.Net.JSON;
 using KillBill.Client.Net.Model;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using RestSharp;
 using RestSharp.Authenticators;
@@ -20,9 +19,14 @@ namespace KillBill.Client.Net.Implementations
     {
         private readonly KillBillConfiguration _config;
 
-        public KillBillHttpClient(IOptions<KillBillConfiguration> config)
+        public KillBillHttpClient(KillBillConfiguration config)
         {
-            _config = config.Value;
+            _config = config;
+        }
+
+        public KillBillConfiguration Configuration
+        {
+            get { return _config; }
         }
 
         // GET
@@ -201,17 +205,17 @@ namespace KillBill.Client.Net.Implementations
             };
 
             // Multi Tenancy Headers
-            request.AddHeader("X-Killbill-ApiKey", requestOptions.TenantApiKey);
-            request.AddHeader("X-Killbill-ApiSecret", requestOptions.TenantApiSecret);
+            request.AddHeader(_config.HDR_API_KEY, requestOptions.TenantApiKey);
+            request.AddHeader(_config.HDR_API_SECRET, requestOptions.TenantApiSecret);
 
             if (requestOptions.CreatedBy != null)
-                request.AddHeader("X-Killbill-CreatedBy", requestOptions.CreatedBy);
+                request.AddHeader(_config.HDR_CREATED_BY, requestOptions.CreatedBy);
 
             if (requestOptions.Comment != null)
-                request.AddHeader("X-Killbill-Comment", requestOptions.Comment);
+                request.AddHeader(_config.HDR_COMMENT, requestOptions.Comment);
 
             if (requestOptions.Reason != null)
-                request.AddHeader("X-Killbill-Reason", requestOptions.Reason);
+                request.AddHeader(_config.HDR_REASON, requestOptions.Reason);
 
             request.AddHeader("Content-Type", "application/json; charset=utf-8");
             request.AddHeader("Accept", "application/json, text/html");

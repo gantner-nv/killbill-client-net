@@ -49,6 +49,8 @@ namespace KillBill.Client.Net.Configuration
             get { return PREFIX + "/" + ACCOUNTS; }
         }
 
+        public string BLOCK { get; set; } = "block";
+
         public string BUNDLES { get; set; } = "bundles";
 
         public string BUNDLES_PATH
@@ -262,6 +264,10 @@ namespace KillBill.Client.Net.Configuration
         public string QUERY_MIGRATED { get; set; } = "migrated";
 
         // Metadata Additional headers
+        public string HDR_API_KEY { get; set; } = "X-Killbill-ApiKey";
+
+        public string HDR_API_SECRET { get; set; } = "X-Killbill-ApiSecret";
+
         public string HDR_CREATED_BY { get; set; } = "X-Killbill-CreatedBy";
 
         public string HDR_REASON { get; set; } = "X-Killbill-Reason";
