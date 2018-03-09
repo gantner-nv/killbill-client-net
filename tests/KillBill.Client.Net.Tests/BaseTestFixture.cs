@@ -29,8 +29,7 @@ namespace KillBill.Client.Net.Tests
                 HttpPassword = "password"
             };
 
-            IKbHttpClient httpClient = new KillBillHttpClient(Configuration);
-            _client = new KillBillClient(httpClient);
+            _client = new KillBillClient(Configuration);
 
             _requestOptions = RequestOptions.Builder()
                                             .WithRequestId(Guid.NewGuid().ToString())

@@ -16,7 +16,6 @@ namespace KillBill.Client.Net.Implementations
     public class KillBillClient : IKillBillClient
     {
         private const AuditLevel DefaultAuditLevel = AuditLevel.NONE;
-        private readonly IKbHttpClient _client;
         private readonly KillBillConfiguration _config;
         private readonly KillBillAccountManager _accountManager;
         private readonly KillBillBundleManager _bundleManager;
@@ -28,9 +27,9 @@ namespace KillBill.Client.Net.Implementations
         private readonly KillBillSubscriptionManager _subscriptionManager;
         private readonly KillBillTenantManager _tenantManager;
 
-        public KillBillClient(IKbHttpClient client)
+        public KillBillClient(KillBillConfiguration configuration)
         {
-            _client = client;
+            var client = new KillBillHttpClient(configuration);
             _config = client.Configuration;
 
             _accountManager = new KillBillAccountManager(client);
