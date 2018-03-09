@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework;
 
 namespace KillBill.Client.Net.Tests.Implementations
@@ -6,6 +7,7 @@ namespace KillBill.Client.Net.Tests.Implementations
     public class CatalogTextFixture : BaseTestFixture
     {
         [Test]
+        [Ignore("This test should only be run manually to upload a new catalog XML. The 'effectiveDate' is unique and 2 catalogs with the same date can not be uploaded.")]
         public void When_UploadingCatalogXml_Then_ItIsSavedCorrectly()
         {
             // arrange
@@ -13,6 +15,29 @@ namespace KillBill.Client.Net.Tests.Implementations
 
             // act
             Client.UploadCatalogXml(catalogXml, RequestOptions);
+        }
+
+        [Test]
+        public void When_GettingCatalogJson_Then_ItIsReturnedCorrectly()
+        {
+            // arrange / act
+            var result = Client.GetCatalogJson(RequestOptions);
+
+            // assert
+            Assert.That(result, Is.Not.Null);
+        }
+
+        [Test]
+        public void Given_Date_When_GettingCatalogJson_Then_ItIsReturnedCorrectly()
+        {
+            // arrange 
+            var date = new DateTime(2018, 01, 01);
+
+            // act
+            var result = Client.GetCatalogJson(RequestOptions, date);
+
+            // assert
+            Assert.That(result, Is.Not.Null);
         }
     }
 }
