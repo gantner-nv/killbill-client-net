@@ -160,6 +160,11 @@ namespace KillBill.Client.Net.Implementations
             return _catalogManager.GetCatalogJson(inputOptions, requestedDate);
         }
 
+        public void UploadCatalogXml(string catalogXml, RequestOptions inputOptions)
+        {
+            _catalogManager.UploadCatalogXml(catalogXml, inputOptions);
+        }
+
         // INVOICE
         public Invoice CreateInvoice(Guid accountId, DateTime futureDate, RequestOptions inputOptions)
         {

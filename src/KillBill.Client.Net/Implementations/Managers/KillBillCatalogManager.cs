@@ -32,5 +32,12 @@ namespace KillBill.Client.Net.Implementations.Managers
             var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).Build();
             return _client.Get<List<Catalog>>(uri, requestOptions);
         }
+
+        public void UploadCatalogXml(string catalogXml, RequestOptions inputOptions)
+        {
+            var uri = Configuration.CATALOG_PATH;
+            var requestOptions = inputOptions.Extend().WithContentType(ContentType.Xml).Build();
+            _client.Post(uri, catalogXml, requestOptions);
+        }
     }
 }

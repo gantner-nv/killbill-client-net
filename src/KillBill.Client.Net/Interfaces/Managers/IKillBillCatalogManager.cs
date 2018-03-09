@@ -9,5 +9,7 @@ namespace KillBill.Client.Net.Interfaces.Managers
     {
         // CATALOG
         List<Catalog> GetCatalogJson(RequestOptions inputOptions, DateTime? requestedDate = null);
+
+        void UploadCatalogXml(string catalogXml, RequestOptions inputOptions);
     }
 }

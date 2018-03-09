@@ -23,6 +23,8 @@ namespace KillBill.Client.Net.Data
 
         private string _tenantApiSecret;
 
+        private string _contentType = ContentType.Json;
+
         private Dictionary<string, string> _headers = new Dictionary<string, string>();
 
         private MultiMap<string> _queryParams = new MultiMap<string>();
@@ -79,6 +81,12 @@ namespace KillBill.Client.Net.Data
             return this;
         }
 
+        public RequestOptionsBuilder WithContentType(string contentType)
+        {
+            _contentType = contentType;
+            return this;
+        }
+
         public RequestOptionsBuilder WithHeader(string header, string value)
         {
             _headers.Add(header, value);
@@ -105,7 +113,7 @@ namespace KillBill.Client.Net.Data
 
         public RequestOptions Build()
         {
-            return new RequestOptions(_requestId, _user, _password, _comment, _reason, _createdBy, _tenantApiKey, _tenantApiSecret, _headers.ToImmutableDictionary(), _queryParams, _followLocation, _queryParamsForFollow);
+            return new RequestOptions(_requestId, _user, _password, _comment, _reason, _createdBy, _tenantApiKey, _tenantApiSecret, _contentType, _headers.ToImmutableDictionary(), _queryParams, _followLocation, _queryParamsForFollow);
         }
     }
 }

@@ -91,11 +91,7 @@ namespace KillBill.Client.Net.Implementations
 
             if (method != Method.GET || method != Method.HEAD)
             {
-                if (body != null)
-                {
-                    try { request.AddBody(body); }
-                    catch (Exception ex) { throw new KillBillClientException("Error serializing object for API request.", ex); }
-                }
+                if (body != null) AddRequestBody(request, body, requestOptions.ContentType);
             }
 
             return ExecuteRequest(request, requestOptions);
@@ -110,17 +106,7 @@ namespace KillBill.Client.Net.Implementations
 
             if (method != Method.GET || method != Method.HEAD)
             {
-                if (body != null)
-                {
-                    try
-                    {
-                        request.AddBody(body);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new KillBillClientException("Error serializing object for API request.", ex);
-                    }
-                }
+                if (body != null) AddRequestBody(request, body, requestOptions.ContentType);
             }
 
             // WHEN FollowLocation == TRUE
@@ -198,11 +184,7 @@ namespace KillBill.Client.Net.Implementations
 
         private IRestRequest BuildRequestWithHeaderAndQuery(Method method, string uri, RequestOptions requestOptions)
         {
-            var request = new RestRequest(uri, method)
-            {
-                RequestFormat = DataFormat.Json,
-                JsonSerializer = new RestSharpJsonNetSerializer()
-            };
+            var request = BuildRequestForFormat(uri, method, requestOptions.ContentType);
 
             // Multi Tenancy Headers
             request.AddHeader(_config.HDR_API_KEY, requestOptions.TenantApiKey);
@@ -217,13 +199,51 @@ namespace KillBill.Client.Net.Implementations
             if (requestOptions.Reason != null)
                 request.AddHeader(_config.HDR_REASON, requestOptions.Reason);
 
-            request.AddHeader("Content-Type", "application/json; charset=utf-8");
+            request.AddHeader("Content-Type", requestOptions.ContentType);
             request.AddHeader("Accept", "application/json, text/html");
 
             foreach (var key in requestOptions.QueryParams.Keys)
                 request.AddParameter(key, requestOptions.QueryParams[key].FirstOrDefault(), ParameterType.QueryString);
 
             return request;
+        }
+
+        private IRestRequest BuildRequestForFormat(string uri, Method method, string contentType)
+        {
+            switch (contentType)
+            {
+                case ContentType.Xml:
+                    return new RestRequest(uri, method)
+                    {
+                        RequestFormat = DataFormat.Xml
+                    };
+                default:
+                    return new RestRequest(uri, method)
+                    {
+                        RequestFormat = DataFormat.Json,
+                        JsonSerializer = new RestSharpJsonNetSerializer()
+                    };
+            }
+        }
+
+        private void AddRequestBody(IRestRequest request, object body, string contentType)
+        {
+            switch (contentType)
+            {
+                case ContentType.Xml:
+                    request.AddParameter("text/xml", body, ParameterType.RequestBody);
+                    return;
+                default:
+                    try
+                    {
+                        request.AddBody(body);
+                        return;
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new KillBillClientException("Error serializing object for API request.", ex);
+                    }
+            }
         }
 
         private IRestResponse ExecuteRequest(IRestRequest request, RequestOptions requestOptions)

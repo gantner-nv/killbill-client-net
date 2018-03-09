@@ -16,6 +16,7 @@ namespace KillBill.Client.Net.Data
             string createdBy,
             string tenantApiKey,
             string tenantApiSecret,
+            string contentType,
             ImmutableDictionary<string, string> headers,
             MultiMap<string> queryParams,
             bool? followLocation,
@@ -30,6 +31,7 @@ namespace KillBill.Client.Net.Data
             TenantApiKey = tenantApiKey;
             TenantApiSecret = tenantApiSecret;
             FollowLocation = followLocation;
+            ContentType = contentType ?? Data.ContentType.Json;
             Headers = headers ?? ImmutableDictionary<string, string>.Empty;
             QueryParams = queryParams ?? new MultiMap<string>();
             QueryParamsForFollow = queryParamsForFollow ?? new MultiMap<string>();
@@ -50,6 +52,8 @@ namespace KillBill.Client.Net.Data
         public string TenantApiKey { get; }
 
         public string TenantApiSecret { get; }
+
+        public string ContentType { get; }
 
         public ImmutableDictionary<string, string> Headers { get; }
 
@@ -82,6 +86,7 @@ namespace KillBill.Client.Net.Data
                 .WithRequestId(Guid.NewGuid().ToString())
                 .WithCreatedBy("Default User")
                 .WithPassword(config.HttpPassword)
+                .WithContentType(Data.ContentType.Json)
                 .Build();
         }
 
