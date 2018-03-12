@@ -1,4 +1,5 @@
 ﻿using System;
+using KillBill.Client.Net.Extensions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -11,7 +12,7 @@ namespace KillBill.Client.Net.JSON
             if (value is DateTime)
             {
                 var dateTime = (DateTime)value;
-                writer.WriteValue(dateTime.ToString("yyyy-MM-dd"));
+                writer.WriteValue(dateTime.ToDateString());
             }
         }
 

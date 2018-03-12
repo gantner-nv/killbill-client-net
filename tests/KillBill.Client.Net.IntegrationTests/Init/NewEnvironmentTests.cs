@@ -3,7 +3,7 @@ using System.Configuration;
 using KillBill.Client.Net.Model;
 using NUnit.Framework;
 
-namespace KillBill.Client.Net.Tests.Init
+namespace KillBill.Client.Net.IntegrationTests.Init
 {
     [TestFixture]
     public class NewEnvironmentTests : BaseTestFixture

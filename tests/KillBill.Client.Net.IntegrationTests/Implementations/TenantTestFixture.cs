@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace KillBill.Client.Net.Tests.Implementations
+namespace KillBill.Client.Net.IntegrationTests.Implementations
 {
     [TestFixture]
     public class TenantTestFixture : BaseTestFixture

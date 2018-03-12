@@ -7,7 +7,7 @@ namespace KillBill.Client.Net.JSON
     {
         public static JsonNetSerializationSettings GetDefault()
         {
-            return new JsonNetSerializationSettings()
+            return new JsonNetSerializationSettings
             {
                 NullValueHandling = NullValueHandling.Ignore,
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),

@@ -1,20 +1,28 @@
-﻿Microsoft Visual Studio Solution File, Format Version 12.00
+Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KillBill.Client.Net", "src\KillBill.Client.Net\KillBill.Client.Net.csproj", "{5AE3B859-2B8F-473F-9C9F-865F49A63E06}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KillBill.Client.Net.Tests", "tests\KillBill.Client.Net.Tests\KillBill.Client.Net.Tests.csproj", "{7E6C80BD-972C-4BFD-A4FF-40583633442A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KillBill.Client.Net.IntegrationTests", "tests\KillBill.Client.Net.IntegrationTests\KillBill.Client.Net.IntegrationTests.csproj", "{7E6C80BD-972C-4BFD-A4FF-40583633442A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B8C9AAE6-36FE-44C0-B805-FBD4A4135838}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{831607A4-79EB-4AD2-B765-FA2C51738FE0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KillBill.Client.Net.UnitTests", "tests\KillBill.Client.Net.UnitTests\KillBill.Client.Net.UnitTests.csproj", "{68E26227-E851-4640-89C3-F02EAF452934}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{5AE3B859-2B8F-473F-9C9F-865F49A63E06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -25,8 +33,23 @@ Global
 		{7E6C80BD-972C-4BFD-A4FF-40583633442A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E6C80BD-972C-4BFD-A4FF-40583633442A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E6C80BD-972C-4BFD-A4FF-40583633442A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68E26227-E851-4640-89C3-F02EAF452934}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68E26227-E851-4640-89C3-F02EAF452934}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68E26227-E851-4640-89C3-F02EAF452934}.Debug|x64.ActiveCfg = Debug|x64
+		{68E26227-E851-4640-89C3-F02EAF452934}.Debug|x64.Build.0 = Debug|x64
+		{68E26227-E851-4640-89C3-F02EAF452934}.Debug|x86.ActiveCfg = Debug|x86
+		{68E26227-E851-4640-89C3-F02EAF452934}.Debug|x86.Build.0 = Debug|x86
+		{68E26227-E851-4640-89C3-F02EAF452934}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68E26227-E851-4640-89C3-F02EAF452934}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68E26227-E851-4640-89C3-F02EAF452934}.Release|x64.ActiveCfg = Release|x64
+		{68E26227-E851-4640-89C3-F02EAF452934}.Release|x64.Build.0 = Release|x64
+		{68E26227-E851-4640-89C3-F02EAF452934}.Release|x86.ActiveCfg = Release|x86
+		{68E26227-E851-4640-89C3-F02EAF452934}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{68E26227-E851-4640-89C3-F02EAF452934} = {831607A4-79EB-4AD2-B765-FA2C51738FE0}
 	EndGlobalSection
 EndGlobal

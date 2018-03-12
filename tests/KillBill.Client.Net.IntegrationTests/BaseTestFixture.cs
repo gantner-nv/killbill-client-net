@@ -5,7 +5,7 @@ using KillBill.Client.Net.Implementations;
 using KillBill.Client.Net.Interfaces;
 using Microsoft.Extensions.Options;
 
-namespace KillBill.Client.Net.Tests
+namespace KillBill.Client.Net.IntegrationTests
 {
     public class BaseTestFixture
     {

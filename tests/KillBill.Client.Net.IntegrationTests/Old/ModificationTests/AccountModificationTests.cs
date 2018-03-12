@@ -3,7 +3,7 @@ using System.Linq;
 using KillBill.Client.Net.Model;
 using NUnit.Framework;
 
-namespace KillBill.Client.Net.Tests.ModificationTests
+namespace KillBill.Client.Net.IntegrationTests.ModificationTests
 {
     [TestFixture]
     public class AccountModificationTests : BaseTestFixture

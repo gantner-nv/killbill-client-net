@@ -1,9 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <AssemblyName>KillBill.Client.Net.Tests</AssemblyName>
-    <PackageId>KillBill.Client.Net.Tests</PackageId>
+    <AssemblyName>KillBill.Client.Net.UnitTests</AssemblyName>
+    <PackageId>KillBill.Client.Net.UnitTests</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <RuntimeFrameworkVersion>2.0.5</RuntimeFrameworkVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

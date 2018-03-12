@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 
-namespace KillBill.Client.Net.Tests.SafeTests
+namespace KillBill.Client.Net.IntegrationTests.SafeTests
 {
     [TestFixture]
     public class CatalogTests : BaseTestFixture

@@ -1,7 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 
-namespace KillBill.Client.Net.Tests.ModificationTests
+namespace KillBill.Client.Net.IntegrationTests.ModificationTests
 {
     [TestFixture]
     [Ignore("This test was disabled as we are not using notifications yet.")]
