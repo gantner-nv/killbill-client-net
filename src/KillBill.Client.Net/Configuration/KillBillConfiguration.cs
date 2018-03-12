@@ -69,6 +69,10 @@ namespace KillBill.Client.Net.Configuration
 
         public string CHARGES { get; set; } = "charges";
 
+        public string CREATEENTITLEMENT_WITHADDONS { get; set; } = "createEntitlementWithAddOns";
+
+        public string CREATEENTITLEMENTS_WITHADDONS { get; set; } = "createEntitlementsWithAddOns";
+
         public string CREDITS { get; set; } = "credits";
 
         public string CREDITS_PATH
@@ -113,6 +117,8 @@ namespace KillBill.Client.Net.Configuration
 
         public string PAGINATION { get; set; } = "pagination";
 
+        public string PAUSE { get; set; } = "pause";
+
         public string PAYMENTS { get; set; } = "payments";
 
         public string PAYMENTS_PATH
@@ -148,6 +154,8 @@ namespace KillBill.Client.Net.Configuration
         public string REGISTER_NOTIFICATION_CALLBACK { get; set; } = "registerNotificationCallback";
 
         public string LEGACY_REGISTER_NOTIFICATION_CALLBACK { get; set; } = "REGISTER_NOTIFICATION_CALLBACK";
+
+        public string RESUME { get; set; } = "resume";
 
         public string SEARCH { get; set; } = "search";
 
@@ -188,6 +196,8 @@ namespace KillBill.Client.Net.Configuration
 
         public string TIMELINE { get; set; } = "timeline";
 
+        public string UNCANCEL { get; set; } = "uncancel";
+
         // Query parameters
         public string QUERY_ACCOUNT_ID { get; set; } = "accountId";
 
@@ -196,6 +206,8 @@ namespace KillBill.Client.Net.Configuration
         public string QUERY_ACCOUNT_WITH_BALANCE_AND_CBA { get; set; } = "accountWithBalanceAndCBA";
 
         public string QUERY_ACCOUNT_TREAT_NULL_AS_RESET { get; set; } = "treatNullAsReset";
+
+        public string QUERY_API_KEY { get; set; } = "apiKey";
 
         public string QUERY_AUDIT { get; set; } = "audit";
 

@@ -33,6 +33,21 @@ namespace KillBill.Client.Net.Implementations.Managers
             return _client.Post<Tenant>(Configuration.TENANTS_PATH, tenant, requestOptions);
         }
 
+        public Tenant GetTenant(Guid tenantId, RequestOptions inputOptions)
+        {
+            var uri = Configuration.TENANTS_PATH + "/" + tenantId;
+            return _client.Get<Tenant>(uri, inputOptions);
+        }
+
+        public Tenant GetTenant(string apiKey, RequestOptions inputOptions)
+        {
+            var uri = Configuration.TENANTS_PATH;
+            var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
+            queryParams.Add(Configuration.QUERY_API_KEY, apiKey);
+            var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).Build();
+            return _client.Get<Tenant>(uri, requestOptions);
+        }
+
         public void UnregisterCallbackNotificationForTenant(Guid tenantId, RequestOptions inputOptions)
         {
             var uri = Configuration.TENANTS_PATH + "/" + Configuration.LEGACY_REGISTER_NOTIFICATION_CALLBACK;

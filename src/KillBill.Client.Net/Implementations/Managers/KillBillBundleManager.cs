@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using KillBill.Client.Net.Configuration;
 using KillBill.Client.Net.Data;
+using KillBill.Client.Net.Extensions;
 using KillBill.Client.Net.Infrastructure;
 using KillBill.Client.Net.Interfaces;
 using KillBill.Client.Net.Interfaces.Managers;
@@ -58,6 +60,48 @@ namespace KillBill.Client.Net.Implementations.Managers
             var requestOptions = inputOptions.Extend().WithFollowLocation(followLocation).Build();
 
             return _client.Put<Bundle>(uri, bundle, requestOptions);
+        }
+
+        public void BlockBundle(Guid bundleId, BlockingState blockingState, RequestOptions inputOptions, DateTime? requestedDate = null, Dictionary<string, string> pluginProperties = null)
+        {
+            if (bundleId == Guid.Empty) throw new ArgumentNullException(nameof(bundleId));
+
+            var uri = Configuration.BUNDLES_PATH + "/" + bundleId + "/" + Configuration.BLOCK;
+
+            var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
+            if (requestedDate.HasValue) queryParams.Add(Configuration.QUERY_REQUESTED_DT, requestedDate.Value.ToDateString());
+            StorePluginPropertiesAsParams(pluginProperties, ref queryParams);
+            var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).Build();
+
+            _client.Put(uri, blockingState, requestOptions);
+        }
+
+        public void PauseBundle(Guid bundleId, RequestOptions inputOptions, DateTime? requestedDate = null, Dictionary<string, string> pluginProperties = null)
+        {
+            if (bundleId == Guid.Empty) throw new ArgumentNullException(nameof(bundleId));
+
+            var uri = Configuration.BUNDLES_PATH + "/" + bundleId + "/" + Configuration.PAUSE;
+
+            var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
+            if (requestedDate.HasValue) queryParams.Add(Configuration.QUERY_REQUESTED_DT, requestedDate.Value.ToDateString());
+            StorePluginPropertiesAsParams(pluginProperties, ref queryParams);
+            var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).Build();
+
+            _client.Put(uri, null, requestOptions);
+        }
+
+        public void ResumeBundle(Guid bundleId, RequestOptions inputOptions, DateTime? requestedDate = null, Dictionary<string, string> pluginProperties = null)
+        {
+            if (bundleId == Guid.Empty) throw new ArgumentNullException(nameof(bundleId));
+
+            var uri = Configuration.BUNDLES_PATH + "/" + bundleId + "/" + Configuration.RESUME;
+
+            var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
+            if (requestedDate.HasValue) queryParams.Add(Configuration.QUERY_REQUESTED_DT, requestedDate.Value.ToDateString());
+            StorePluginPropertiesAsParams(pluginProperties, ref queryParams);
+            var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).Build();
+
+            _client.Put(uri, null, requestOptions);
         }
 
         // BUNDLES

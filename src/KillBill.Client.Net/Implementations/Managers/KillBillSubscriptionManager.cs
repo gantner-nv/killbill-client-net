@@ -28,32 +28,10 @@ namespace KillBill.Client.Net.Implementations.Managers
 
         public Subscription CreateSubscription(Subscription subscription, RequestOptions inputOptions, DateTime? requestedDate = null, bool? isMigrated = null)
         {
+            ValidateSubscription(subscription);
+
             // var httpTimeout = Configuration.DEFAULT_HTTP_TIMEOUT_SEC;
             var followLocation = inputOptions.FollowLocation ?? true;
-
-            if (subscription.PlanName == null)
-            {
-                if (subscription.AccountId.Equals(Guid.Empty))
-                    throw new ArgumentException("Subscription#accountId cannot be empty");
-
-                if (string.IsNullOrEmpty(subscription.ProductName))
-                    throw new ArgumentException("Subscription#productName cannot be null");
-
-                if (string.IsNullOrEmpty(subscription.ProductCategory))
-                    throw new ArgumentException("Subscription#productCategory cannot be null");
-
-                if (string.IsNullOrEmpty(subscription.BillingPeriod))
-                    throw new ArgumentException("Subscription#billingPeriod cannot be null");
-
-                if (string.IsNullOrEmpty(subscription.PriceList))
-                    throw new ArgumentException("Subscription#priceList cannot be null");
-            }
-
-            if (subscription.ProductCategory == "BASE")
-            {
-                if (subscription.AccountId.Equals(Guid.Empty))
-                    throw new ArgumentException("Subscription#accountId cannot be empty");
-            }
 
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
 
@@ -84,20 +62,7 @@ namespace KillBill.Client.Net.Implementations.Managers
             if (subscription.SubscriptionId.Equals(Guid.Empty))
                 throw new ArgumentException("Subscription#subscriptionId cannot be empty");
 
-            if (subscription.PlanName == null)
-            {
-                if (string.IsNullOrEmpty(subscription.ProductName))
-                    throw new ArgumentException("Subscription#productName cannot be null");
-
-                if (string.IsNullOrEmpty(subscription.ProductCategory))
-                    throw new ArgumentException("Subscription#productCategory cannot be null");
-
-                if (string.IsNullOrEmpty(subscription.BillingPeriod))
-                    throw new ArgumentException("Subscription#billingPeriod cannot be null");
-
-                if (string.IsNullOrEmpty(subscription.PriceList))
-                    throw new ArgumentException("Subscription#priceList cannot be null");
-            }
+            ValidateSubscription(subscription, false);
 
             var uri = Configuration.SUBSCRIPTIONS_PATH + "/" + subscription.SubscriptionId;
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
@@ -157,29 +122,46 @@ namespace KillBill.Client.Net.Implementations.Managers
             _client.Delete(uri, requestOptions);
         }
 
-        public Bundle CreateSubscriptionWithAddOns(IEnumerable<Subscription> subscriptions, RequestOptions inputOptions, DateTime? requestedDate = null, int? timeoutSec = null)
+        public void UncancelSubscription(Guid subscriptionId, RequestOptions inputOptions, Dictionary<string, string> pluginProperties = null)
+        {
+            if (subscriptionId == Guid.Empty) throw new ArgumentNullException(nameof(subscriptionId));
+
+            var uri = Configuration.SUBSCRIPTIONS_PATH + "/" + subscriptionId + "/" + Configuration.UNCANCEL;
+
+            var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
+            StorePluginPropertiesAsParams(pluginProperties, ref queryParams);
+            var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).Build();
+
+            _client.Put(uri, null, requestOptions);
+        }
+
+        public Bundle CreateSubscriptionWithAddOns(Subscription subscription, RequestOptions inputOptions, DateTime? requestedDate = null, int? timeoutSec = null)
+        {
+            ValidateSubscription(subscription);
+
+            var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
+            if (timeoutSec.HasValue && timeoutSec.Value > 0)
+            {
+                queryParams.Add(Configuration.QUERY_CALL_COMPLETION, "true");
+                queryParams.Add(Configuration.QUERY_CALL_TIMEOUT, timeoutSec.Value.ToString());
+            }
+
+            if (requestedDate.HasValue)
+                queryParams.Add(Configuration.QUERY_REQUESTED_DT, requestedDate.Value.ToDateString());
+
+            // var httpTimeout = Math.Max(Configuration.DEFAULT_HTTP_TIMEOUT_SEC, timeoutSec ?? 0);
+            var uri = Configuration.SUBSCRIPTIONS_PATH + "/" + Configuration.CREATEENTITLEMENT_WITHADDONS;
+            var followLocation = inputOptions.FollowLocation ?? true;
+            var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).WithFollowLocation(followLocation).Build();
+
+            return _client.Post<Bundle>(uri, subscription, requestOptions);
+        }
+
+        public Bundle CreateSubscriptionsWithAddOns(IEnumerable<Subscription> subscriptions, RequestOptions inputOptions, DateTime? requestedDate = null, int? timeoutSec = null)
         {
             foreach (var subscription in subscriptions)
             {
-                if (string.IsNullOrEmpty(subscription.PlanName))
-                {
-                    if (string.IsNullOrEmpty(subscription.ProductName))
-                        throw new ArgumentException("Subscription#productName cannot be null");
-
-                    if (string.IsNullOrEmpty(subscription.ProductCategory))
-                        throw new ArgumentException("Subscription#productCategory cannot be null");
-
-                    if (string.IsNullOrEmpty(subscription.ProductCategory))
-                        throw new ArgumentException("Subscription#billingPeriod cannot be null");
-
-                    if (string.IsNullOrEmpty(subscription.PriceList))
-                        throw new ArgumentException("Subscription#priceList cannot be null");
-
-                    if (subscription.ProductCategory == "BASE" && subscription.AccountId.Equals(Guid.Empty))
-                    {
-                        throw new ArgumentException("Account#accountId cannot be null for base subscription");
-                    }
-                }
+                ValidateSubscription(subscription);
             }
 
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
@@ -193,12 +175,45 @@ namespace KillBill.Client.Net.Implementations.Managers
                 queryParams.Add(Configuration.QUERY_REQUESTED_DT, requestedDate.Value.ToDateString());
 
             // var httpTimeout = Math.Max(Configuration.DEFAULT_HTTP_TIMEOUT_SEC, timeoutSec ?? 0);
-            var uri = Configuration.SUBSCRIPTIONS_PATH + "/createEntitlementWithAddOns";
+            var uri = Configuration.SUBSCRIPTIONS_PATH + "/" + Configuration.CREATEENTITLEMENTS_WITHADDONS;
             var followLocation = inputOptions.FollowLocation ?? true;
-            var requestOptions =
-                inputOptions.Extend().WithQueryParams(queryParams).WithFollowLocation(followLocation).Build();
+            var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).WithFollowLocation(followLocation).Build();
 
             return _client.Post<Bundle>(uri, subscriptions, requestOptions);
+        }
+
+        public void BlockSubscription(Guid subscriptionId, BlockingState blockingState, RequestOptions inputOptions, DateTime? requestedDate = null, Dictionary<string, string> pluginProperties = null)
+        {
+            if (subscriptionId == Guid.Empty) throw new ArgumentNullException(nameof(subscriptionId));
+
+            var uri = Configuration.SUBSCRIPTIONS_PATH + "/" + subscriptionId + "/" + Configuration.BLOCK;
+
+            var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
+            if (requestedDate.HasValue) queryParams.Add(Configuration.QUERY_REQUESTED_DT, requestedDate.Value.ToDateString());
+            StorePluginPropertiesAsParams(pluginProperties, ref queryParams);
+            var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).Build();
+
+            _client.Put(uri, blockingState, requestOptions);
+        }
+
+        private void ValidateSubscription(Subscription subscription, bool validateAccount = true)
+        {
+            if (!string.IsNullOrEmpty(subscription.PlanName)) return;
+
+            if (validateAccount && subscription.ProductCategory == "BASE" && subscription.AccountId.Equals(Guid.Empty))
+                throw new ArgumentException("Account#accountId cannot be empty for base subscription");
+
+            if (string.IsNullOrEmpty(subscription.ProductName))
+                throw new ArgumentException("Subscription#productName cannot be null");
+
+            if (string.IsNullOrEmpty(subscription.ProductCategory))
+                throw new ArgumentException("Subscription#productCategory cannot be null");
+
+            if (string.IsNullOrEmpty(subscription.BillingPeriod))
+                throw new ArgumentException("Subscription#billingPeriod cannot be null");
+
+            if (string.IsNullOrEmpty(subscription.PriceList))
+                throw new ArgumentException("Subscription#priceList cannot be null");
         }
     }
 }

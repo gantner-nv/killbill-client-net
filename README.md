@@ -1,12 +1,46 @@
+Overview
+===
+An ASP.NET Core client library for [Killbill](http://killbill.io).
+
+The client library is currently built in **netstandard2.0**.
+
 Background
 ===
-This was put together to give a simple .NET client wrapper around the KillBill HTTP API (http://killbill.io/api)
+This library was forked from the original draft & prototype version which is available on https://github.com/galenp/killbill-client-net.
 
-However the main objective was mostly for me to learn the HTTP API... this client is incomplete and a blatant and poor rip off of the KillBill Java Client.
+We converted the library to ASP.NET Core + upgraded, improved and refactored this library so we can make use of it correctly and efficiently.
 
-We have been using it in a production platform for very simple direct payments for a couple of years... but are now ready to expand into subscriptions / billing / catalog and as such this client will eventually be updated to cover our use cases.
+Getting started
+===
+To make use of Killbill methods, we first need to create the configuration.
 
-I doubt we have the time to achieve full API coverage... and furthermore this client was put together without the .NET 4.5 HTTP ASYNC ... that is almost a deal breaker immediately.
+    var configuration = new KillBillConfiguration
+    {
+        ServerUrl = "http://localhost:8080",
+        ApiKey = "mykey",
+        ApiSecret = "mysecret",
+        HttpUser = "admin",
+        HttpPassword = "password"
+    };
 
-If you want to FORK and butcher it for your own needs... please do so.
+Next, we create a KillBillClient object based on that configuration.
 
+    var client = new KillBillClient(Configuration);
+
+Before we can start making use of the Killbill interface, we can easily create a generic RequestOptions object by making use of the extension methods. This is optional, but can save some time...
+
+    var requestOptions = RequestOptions.Builder()
+        .WithRequestId(Guid.NewGuid().ToString())
+        .WithCreatedBy(CreatedBy)
+        .WithReason(Reason)
+        .WithUser(Configuration.HttpUser)
+        .WithPassword(Configuration.HttpPassword)
+        .WithTenantApiKey(Configuration.ApiKey)
+        .WithTenantApiSecret(Configuration.ApiSecret)
+        .WithComment("kill-bill-test")
+        .Build();
+
+And now we can start using it by simply calling the method(s) we need.
+Eg. find an account by id:
+
+    var account = Client.GetAccount(accountId, requestOptions);

@@ -133,6 +133,21 @@ namespace KillBill.Client.Net.Implementations
             return _bundleManager.TransferBundle(bundle, inputOptions);
         }
 
+        public void BlockBundle(Guid bundleId, BlockingState blockingState, RequestOptions inputOptions, DateTime? requestedDate = null, Dictionary<string, string> pluginProperties = null)
+        {
+            _bundleManager.BlockBundle(bundleId, blockingState, inputOptions, requestedDate, pluginProperties);
+        }
+
+        public void PauseBundle(Guid bundleId, RequestOptions inputOptions, DateTime? requestedDate = null, Dictionary<string, string> pluginProperties = null)
+        {
+            _bundleManager.PauseBundle(bundleId, inputOptions, requestedDate, pluginProperties);
+        }
+
+        public void ResumeBundle(Guid bundleId, RequestOptions inputOptions, DateTime? requestedDate = null, Dictionary<string, string> pluginProperties = null)
+        {
+            _bundleManager.ResumeBundle(bundleId, inputOptions, requestedDate, pluginProperties);
+        }
+
         // BUNDLES
         public Bundles GetAccountBundles(Guid accountId, RequestOptions inputOptions)
         {
@@ -335,15 +350,40 @@ namespace KillBill.Client.Net.Implementations
             _subscriptionManager.CancelSubscription(subscriptionId, inputOptions, requestedDate, useRequestedDateForBilling, entitlementPolicy, billingPolicy);
         }
 
-        public Bundle CreateSubscriptionWithAddOns(IEnumerable<Subscription> subscriptions, RequestOptions inputOptions, DateTime? requestedDate = null, int? timeoutSec = null)
+        public void UncancelSubscription(Guid subscriptionId, RequestOptions inputOptions, Dictionary<string, string> pluginProperties = null)
         {
-            return _subscriptionManager.CreateSubscriptionWithAddOns(subscriptions, inputOptions, requestedDate, timeoutSec);
+            _subscriptionManager.UncancelSubscription(subscriptionId, inputOptions, pluginProperties);
         }
 
-        // TENANT    
+        public Bundle CreateSubscriptionWithAddOns(Subscription subscription, RequestOptions inputOptions, DateTime? requestedDate = null, int? timeoutSec = null)
+        {
+            return _subscriptionManager.CreateSubscriptionWithAddOns(subscription, inputOptions, requestedDate, timeoutSec);
+        }
+
+        public Bundle CreateSubscriptionsWithAddOns(IEnumerable<Subscription> subscriptions, RequestOptions inputOptions, DateTime? requestedDate = null, int? timeoutSec = null)
+        {
+            return _subscriptionManager.CreateSubscriptionsWithAddOns(subscriptions, inputOptions, requestedDate, timeoutSec);
+        }
+
+        public void BlockSubscription(Guid subscriptionId, BlockingState blockingState, RequestOptions inputOptions, DateTime? requestedDate = null, Dictionary<string, string> pluginProperties = null)
+        {
+            _subscriptionManager.BlockSubscription(subscriptionId, blockingState, inputOptions, requestedDate, pluginProperties);
+        }
+
+        // TENANT
         public Tenant CreateTenant(Tenant tenant, RequestOptions inputOptions, bool useGlobalDefault = true)
         {
             return _tenantManager.CreateTenant(tenant, inputOptions, useGlobalDefault);
+        }
+
+        public Tenant GetTenant(Guid tenantId, RequestOptions inputOptions)
+        {
+            return _tenantManager.GetTenant(tenantId, inputOptions);
+        }
+
+        public Tenant GetTenant(string apiKey, RequestOptions inputOptions)
+        {
+            return _tenantManager.GetTenant(apiKey, inputOptions);
         }
 
         public void UnregisterCallbackNotificationForTenant(Guid tenantId, RequestOptions inputOptions)

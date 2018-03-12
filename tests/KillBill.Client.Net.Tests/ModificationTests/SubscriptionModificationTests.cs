@@ -11,7 +11,7 @@ namespace KillBill.Client.Net.Tests.ModificationTests
         private readonly string _externalKey = "aaaaa";
 
         [Test]
-        public void Create_New_Subscription_WithAddons()
+        public void Create_New_Subscriptions_WithAddons()
         {
             // arrange
             var bundleKey = Guid.NewGuid();
@@ -39,7 +39,7 @@ namespace KillBill.Client.Net.Tests.ModificationTests
             };
 
             // act
-            var bundle = Client.CreateSubscriptionWithAddOns(subscriptions, RequestOptions);
+            var bundle = Client.CreateSubscriptionsWithAddOns(subscriptions, RequestOptions);
 
             // assert
             Assert.That(bundle, Is.Not.Null);

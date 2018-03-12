@@ -9,6 +9,8 @@ namespace KillBill.Client.Net.Tests
 {
     public class BaseTestFixture
     {
+        private static readonly string _apiKey = "SyxKey";
+        private static readonly Guid _tenantId = new Guid("c2b232b8-9938-4cee-9a38-e6b5e31d0a66");
         private static readonly Guid _accountId = new Guid("54a9653f-7295-4dfb-94bd-1df83097cc0d");
         private readonly Guid _bundleId = new Guid("554fe9de-b9e9-4321-ab71-791151944a91");
         private readonly KillBillClient _client;
@@ -23,7 +25,7 @@ namespace KillBill.Client.Net.Tests
             _configuration = new KillBillConfiguration
             {
                 ServerUrl = "http://localhost:8080",
-                ApiKey = "SyxKey",
+                ApiKey = _apiKey,
                 ApiSecret = "SyxSecret",
                 HttpUser = "admin",
                 HttpPassword = "password"
@@ -41,6 +43,16 @@ namespace KillBill.Client.Net.Tests
                                             .WithTenantApiSecret(Configuration.ApiSecret)
                                             .WithComment("kill-bill-net-tests")
                                             .Build();
+        }
+
+        protected static string ApiKey
+        {
+            get { return _apiKey; }
+        }
+
+        protected static Guid TenantId
+        {
+            get { return _tenantId; }
         }
 
         protected static Guid AccountId

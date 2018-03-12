@@ -9,6 +9,10 @@ namespace KillBill.Client.Net.Interfaces.Managers
         // TENANT
         Tenant CreateTenant(Tenant tenant, RequestOptions inputOptions, bool useGlobalDefault = true);
 
+        Tenant GetTenant(Guid tenantId, RequestOptions inputOptions);
+
+        Tenant GetTenant(string apiKey, RequestOptions inputOptions);
+
         void UnregisterCallbackNotificationForTenant(Guid tenantId, RequestOptions inputOptions);
 
         // TENANT KEY
