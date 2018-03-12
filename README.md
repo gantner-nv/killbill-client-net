@@ -44,3 +44,7 @@ And now we can start using it by simply calling the method(s) we need.
 Eg. find an account by id:
 
     var account = Client.GetAccount(accountId, requestOptions);
+
+History
+===
+See [Change log](README_ChangeLog.md) for all documented changes and version history.
