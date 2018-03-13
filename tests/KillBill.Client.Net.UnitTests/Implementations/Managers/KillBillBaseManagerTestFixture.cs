@@ -20,7 +20,7 @@ namespace KillBill.Client.Net.UnitTests.Implementations.Managers
                 { "Test1", "whatever" },
                 { "Test2", "rules" }
             };
-            var configuration = new KillBillConfiguration();
+            var configuration = new KillBillConfiguration(string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
 
             var killBillBaseManager = new KillBillBaseManager(configuration);
 

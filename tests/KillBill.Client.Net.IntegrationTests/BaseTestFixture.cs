@@ -22,17 +22,8 @@ namespace KillBill.Client.Net.IntegrationTests
 
         public BaseTestFixture()
         {
-            _configuration = new KillBillConfiguration
-            {
-                ServerUrl = "http://localhost:8080",
-                ApiKey = _apiKey,
-                ApiSecret = "SyxSecret",
-                HttpUser = "admin",
-                HttpPassword = "password"
-            };
-
+            _configuration = new KillBillConfiguration("http://localhost:8080", _apiKey, "SyxSecret", "admin", "password");
             _client = new KillBillClient(Configuration);
-
             _requestOptions = RequestOptions.Builder()
                                             .WithRequestId(Guid.NewGuid().ToString())
                                             .WithCreatedBy(CreatedBy)

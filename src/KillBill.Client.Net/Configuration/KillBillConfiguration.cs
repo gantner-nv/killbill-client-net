@@ -2,6 +2,16 @@ namespace KillBill.Client.Net.Configuration
 {
     public class KillBillConfiguration
     {
+        public KillBillConfiguration(string serverUrl, string apiKey, string apiSecret, string httpUser, string httpPassword, string apiProxy = null)
+        {
+            ServerUrl = serverUrl;
+            ApiKey = apiKey;
+            ApiSecret = apiSecret;
+            HttpUser = httpUser;
+            HttpPassword = httpPassword;
+            ApiProxy = apiProxy;
+        }
+
         // Configurable items
         public string ServerUrl { get; set; }
 
