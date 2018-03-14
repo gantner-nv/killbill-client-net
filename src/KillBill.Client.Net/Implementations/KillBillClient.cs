@@ -180,6 +180,12 @@ namespace KillBill.Client.Net.Implementations
             _catalogManager.UploadCatalogXml(catalogXml, inputOptions);
         }
 
+        // PRODUCT
+        public Product GetProductFromSubscription(Guid subscriptionId, RequestOptions inputOptions, DateTime? requestedDate = null)
+        {
+            return _catalogManager.GetProductFromSubscription(subscriptionId, inputOptions, requestedDate);
+        }
+
         // INVOICE
         public Invoice CreateInvoice(Guid accountId, DateTime futureDate, RequestOptions inputOptions)
         {

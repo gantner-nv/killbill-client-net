@@ -26,7 +26,7 @@ namespace KillBill.Client.Net.Implementations.Managers
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
             if (requestedDate.HasValue)
             {
-                queryParams.Add(Configuration.QUERY_DELETE_DEFAULT_PM_WITH_AUTO_PAY_OFF, requestedDate.Value.ToDateString());
+                queryParams.Add(Configuration.QUERY_REQUESTED_DT, requestedDate.Value.ToDateString());
             }
 
             var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).Build();
@@ -38,6 +38,20 @@ namespace KillBill.Client.Net.Implementations.Managers
             var uri = Configuration.CATALOG_PATH;
             var requestOptions = inputOptions.Extend().WithContentType(ContentType.Xml).Build();
             _client.Post(uri, catalogXml, requestOptions);
+        }
+
+        // PRODUCT
+        public Product GetProductFromSubscription(Guid subscriptionId, RequestOptions inputOptions, DateTime? requestedDate = null)
+        {
+            var uri = Configuration.CATALOG_PATH + "/" + Configuration.PRODUCT;
+            var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
+            if (requestedDate.HasValue)
+            {
+                queryParams.Add(Configuration.QUERY_REQUESTED_DT, requestedDate.Value.ToDateString());
+            }
+
+            var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).Build();
+            return _client.Get<Product>(uri, requestOptions);
         }
     }
 }

@@ -11,5 +11,8 @@ namespace KillBill.Client.Net.Interfaces.Managers
         List<Catalog> GetCatalogJson(RequestOptions inputOptions, DateTime? requestedDate = null);
 
         void UploadCatalogXml(string catalogXml, RequestOptions inputOptions);
+
+        // PRODUCT
+        Product GetProductFromSubscription(Guid subscriptionId, RequestOptions inputOptions, DateTime? requestedDate = null);
     }
 }

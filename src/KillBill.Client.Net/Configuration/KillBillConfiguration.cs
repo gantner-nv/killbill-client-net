@@ -159,6 +159,8 @@ namespace KillBill.Client.Net.Configuration
             get { return "/" + PLUGINS; }
         }
 
+        public string PRODUCT { get; set; } = "product";
+
         public string REFUNDS { get; set; } = "refunds";
 
         public string REGISTER_NOTIFICATION_CALLBACK { get; set; } = "registerNotificationCallback";
