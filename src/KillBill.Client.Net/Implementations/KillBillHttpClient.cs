@@ -314,7 +314,7 @@ namespace KillBill.Client.Net.Implementations
             return new RestClient(baseUri)
             {
                 Authenticator = new HttpBasicAuthenticator(requestOptions.User, requestOptions.Password),
-                Proxy = proxyUri == null ? new WebProxy(proxyUri) : null
+                Proxy = proxyUri != null ? new WebProxy(proxyUri) : null
             };
         }
 
