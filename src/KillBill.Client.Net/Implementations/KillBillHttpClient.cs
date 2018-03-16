@@ -110,7 +110,7 @@ namespace KillBill.Client.Net.Implementations
             }
 
             // WHEN FollowLocation == TRUE
-            if (requestOptions.FollowLocation.HasValue && requestOptions.FollowLocation.Value)
+            if (requestOptions.FollowLocation == true)
             {
                 var responseToFollow = ExecuteRequest(request, requestOptions);
 
@@ -139,6 +139,13 @@ namespace KillBill.Client.Net.Implementations
 
             // If there is no response (204) or if an object cannot be found (404), the code will return null (for single objects) or an empty list (for collections of objects).
             if (response.StatusCode == HttpStatusCode.NoContent || response.StatusCode == HttpStatusCode.NotFound)
+            {
+                // Return empty list for KillBillObjects instead of null for convenience
+                return typeof(T).IsAssignableFrom(typeof(KillBillObjects<>)) ? Activator.CreateInstance<T>() : default(T);
+            }
+
+            // If there we did not want to follow the location on a POST method, we return the default
+            if (method == Method.POST && requestOptions.FollowLocation != true)
             {
                 // Return empty list for KillBillObjects instead of null for convenience
                 return typeof(T).IsAssignableFrom(typeof(KillBillObjects<>)) ? Activator.CreateInstance<T>() : default(T);
