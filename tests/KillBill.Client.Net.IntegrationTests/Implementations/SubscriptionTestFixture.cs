@@ -9,7 +9,7 @@ namespace KillBill.Client.Net.IntegrationTests.Implementations
     public class SubscriptionTestFixture
     {
         [Test]
-        public void When_Then()
+        public void Given_FollowLocationFalse_When_CreatingSubscription_Then_NoResultIsReturned()
         {
             // arrange
             var config = new KillBillConfiguration("https://alb.development.syx-route66.site:9090", "SyxAutomations", "SyxAutomations", "admin", "password");
@@ -18,8 +18,8 @@ namespace KillBill.Client.Net.IntegrationTests.Implementations
             // create account
             var account = new KillBill.Client.Net.Model.Account
             {
-                Name = "subscriptiontest2",
-                ExternalKey = "subscriptiontestkey2=="
+                Name = "subscriptiontest6", // provide non existing account name
+                ExternalKey = "subscriptiontestkey6==" // provide non existing account name
             };
 
             var createdAccount = client.CreateAccount(account, client.BaseOptions("enviso"));
@@ -28,7 +28,7 @@ namespace KillBill.Client.Net.IntegrationTests.Implementations
             var subscription = new KillBill.Client.Net.Model.Subscription
             {
                 AccountId = createdAccount.AccountId,
-                PlanName = "forms_standard",
+                PlanName = "admin_standard",
                 StartDate = DateTime.Now
             };
 
@@ -38,6 +38,7 @@ namespace KillBill.Client.Net.IntegrationTests.Implementations
             var result = client.CreateSubscription(subscription, options);
 
             // assert
+            Assert.That(result, Is.Null);
         }
     }
 }
