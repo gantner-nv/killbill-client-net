@@ -59,6 +59,10 @@ namespace KillBill.Client.Net.Configuration
             get { return PREFIX + "/" + ACCOUNTS; }
         }
 
+        public string AVAILABLEBASEPLANS { get; set; } = "availableBasePlans";
+
+        public string AVAILABLEADDONS { get; set; } = "availableAddons";
+
         public string BLOCK { get; set; } = "block";
 
         public string BUNDLES { get; set; } = "bundles";
@@ -152,12 +156,16 @@ namespace KillBill.Client.Net.Configuration
             get { return PREFIX + "/" + PAYMENT_METHODS; }
         }
 
+        public string PLAN { get; set; } = "plan";
+
         public string PLUGINS { get; set; } = "plugins";
 
         public string PLUGINS_PATH
         {
             get { return "/" + PLUGINS; }
         }
+
+        public string PRICELIST { get; set; } = "priceList";
 
         public string PRODUCT { get; set; } = "product";
 
@@ -265,15 +273,17 @@ namespace KillBill.Client.Net.Configuration
 
         public string QUERY_PAYMENT_EXT_KEY { get; set; } = "paymentExternalKey";
 
-        public string QUERY_TRANSACTION_EXT_KEY { get; set; } = "transactionExternalKey";
-
         public string QUERY_SEARCH_LIMIT { get; set; } = "limit";
 
         public string QUERY_SEARCH_OFFSET { get; set; } = "offset";
 
+        public string QUERY_SUBSCRIPTION_ID { get; set; } = "subscriptionId";
+
         public string QUERY_TAGS { get; set; } = "tagList";
 
         public string QUERY_TARGET_DATE { get; set; } = "targetDate";
+
+        public string QUERY_TRANSACTION_EXT_KEY { get; set; } = "transactionExternalKey";
 
         public string QUERY_UNPAID_INVOICES_ONLY { get; set; } = "unpaidInvoicesOnly";
 

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using NUnit.Framework;
 
 namespace KillBill.Client.Net.IntegrationTests.SafeTests
@@ -7,10 +8,10 @@ namespace KillBill.Client.Net.IntegrationTests.SafeTests
     public class CatalogTests : BaseTestFixture
     {
         [Test]
-        public void Get_Catalog_Json()
+        public async Task Get_Catalog_Json()
         {
             // act
-            var catalogs = Client.GetCatalogJson(RequestOptions);
+            var catalogs = await Client.GetCatalogJson(RequestOptions);
 
             // assert
             if (catalogs == null)
@@ -34,10 +35,10 @@ namespace KillBill.Client.Net.IntegrationTests.SafeTests
         }
 
         [Test]
-        public void Get_Base_Plans()
+        public async Task Get_Base_Plans()
         {
             // act
-            var plans = Client.GetBasePlans(RequestOptions);
+            var plans = await Client.GetBasePlans(RequestOptions);
 
             // assert
             if (plans == null)
@@ -62,10 +63,10 @@ namespace KillBill.Client.Net.IntegrationTests.SafeTests
         }
 
         [Test]
-        public void Get_Available_Addons()
+        public async Task Get_Available_Addons()
         {
             // act
-            var addons = Client.GetAvailableAddons("system-connect", RequestOptions);
+            var addons = await Client.GetAvailableAddons("system-connect", RequestOptions);
 
             // assert
             if (addons == null)

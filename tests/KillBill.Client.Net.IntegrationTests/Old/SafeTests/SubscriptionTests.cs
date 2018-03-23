@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using NUnit.Framework;
 
 namespace KillBill.Client.Net.IntegrationTests.SafeTests
@@ -7,13 +8,13 @@ namespace KillBill.Client.Net.IntegrationTests.SafeTests
     public class SubscriptionTests : BaseTestFixture
     {
         [TestCase("fab1f507-d43c-4f9d-8ec3-070414512c45")]
-        public void Get_Subscription(string strId)
+        public async Task Get_Subscription(string strId)
         {
             // arrange
             var subscriptionId = Guid.Parse(strId);
 
             // act
-            var subscription = Client.GetSubscription(subscriptionId, RequestOptions);
+            var subscription = await Client.GetSubscription(subscriptionId, RequestOptions);
 
             // assert
             if (subscription == null)

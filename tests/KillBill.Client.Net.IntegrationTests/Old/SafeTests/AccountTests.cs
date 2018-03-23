@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using NUnit.Framework;
 
 namespace KillBill.Client.Net.IntegrationTests.SafeTests
@@ -9,20 +10,20 @@ namespace KillBill.Client.Net.IntegrationTests.SafeTests
     {
         [Test]
         [TestCase("lister-bundle-a053363e-933e-4d16-91ab-a65c41111bf8")]
-        public void Get_Bundle(string bundleKey)
+        public async Task Get_Bundle(string bundleKey)
         {
             // act
-            var bundle = Client.GetBundle(bundleKey, RequestOptions);
+            var bundle = await Client.GetBundle(bundleKey, RequestOptions);
 
             // assert 
             Assert.That(bundle, Is.Not.Null);
         }
 
         [Test]
-        public void Get_Bundles()
+        public async Task Get_Bundles()
         {
             // act
-            var bundles = Client.GetAccountBundles(AccountId, RequestOptions);
+            var bundles = await Client.GetAccountBundles(AccountId, RequestOptions);
 
             // assert
             if (!bundles.Any())
@@ -37,10 +38,10 @@ namespace KillBill.Client.Net.IntegrationTests.SafeTests
         }
 
         [Test]
-        public void Get_Invoices()
+        public async Task Get_Invoices()
         {
             // act
-            var invoices = Client.GetInvoicesForAccount(AccountId, RequestOptions);
+            var invoices = await Client.GetInvoicesForAccount(AccountId, RequestOptions);
 
             // assert
             if (!invoices.Any())
@@ -53,10 +54,10 @@ namespace KillBill.Client.Net.IntegrationTests.SafeTests
         }
 
         [Test]
-        public void Get_Account_Timeline()
+        public async Task Get_Account_Timeline()
         {
             // act 
-            var timeline = Client.GetAccountTimeline(AccountId, RequestOptions);
+            var timeline = await Client.GetAccountTimeline(AccountId, RequestOptions);
 
             // assert
             Assert.That(timeline, Is.Not.Null);
@@ -65,10 +66,10 @@ namespace KillBill.Client.Net.IntegrationTests.SafeTests
         }
 
         [Test]
-        public void Get_Emails_For_Account()
+        public async Task Get_Emails_For_Account()
         {
             // act
-            var emails = Client.GetEmailsForAccount(AccountId, RequestOptions);
+            var emails = await Client.GetEmailsForAccount(AccountId, RequestOptions);
 
             // assert
             if (!emails.Any())
@@ -78,10 +79,10 @@ namespace KillBill.Client.Net.IntegrationTests.SafeTests
         }
 
         [Test]
-        public void Get_Payments_For_Account()
+        public async Task Get_Payments_For_Account()
         {
             // act
-            var payments = Client.GetPaymentsForAccount(AccountId, RequestOptions);
+            var payments = await Client.GetPaymentsForAccount(AccountId, RequestOptions);
 
             // assert
             if (!payments.Any())
@@ -91,10 +92,10 @@ namespace KillBill.Client.Net.IntegrationTests.SafeTests
         }
 
         [Test]
-        public void Get_InvoicePayments_For_Account()
+        public async Task Get_InvoicePayments_For_Account()
         {
             // act
-            var invoicePayments = Client.GetInvoicePaymentsForAccount(AccountId, RequestOptions);
+            var invoicePayments = await Client.GetInvoicePaymentsForAccount(AccountId, RequestOptions);
 
             // assert
             if (!invoicePayments.Any())

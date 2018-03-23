@@ -11,7 +11,6 @@ namespace KillBill.Client.Net.Interfaces
                                        IKillBillCatalogManager,
                                        IKillBillSubscriptionManager,
                                        IKillBillBundleManager,
-                                       IKillBillPlanManager,
                                        IKillBillInvoiceManager,
                                        IKillBillPaymentManager,
                                        IKillBillNotificationManager

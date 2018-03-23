@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using KillBill.Client.Net.Data;
 using KillBill.Client.Net.Extensions;
 using KillBill.Client.Net.Infrastructure;
@@ -20,13 +21,13 @@ namespace KillBill.Client.Net.Implementations.Managers
         }
 
         // SUBSCRIPTION
-        public Subscription GetSubscription(Guid subscriptionId, RequestOptions inputOptions)
+        public async Task<Subscription> GetSubscription(Guid subscriptionId, RequestOptions inputOptions)
         {
             var uri = Configuration.SUBSCRIPTIONS_PATH + "/" + subscriptionId;
-            return _client.Get<Subscription>(uri, inputOptions);
+            return await _client.Get<Subscription>(uri, inputOptions);
         }
 
-        public Subscription CreateSubscription(Subscription subscription, RequestOptions inputOptions, DateTime? requestedDate = null, bool? isMigrated = null)
+        public async Task<Subscription> CreateSubscription(Subscription subscription, RequestOptions inputOptions, DateTime? requestedDate = null, bool? isMigrated = null)
         {
             ValidateSubscription(subscription);
 
@@ -54,10 +55,10 @@ namespace KillBill.Client.Net.Implementations.Managers
             var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).WithFollowLocation(followLocation).Build();
 
             // return client.Post<Subscription>(Configuration.SUBSCRIPTIONS_PATH, subscription, requestOptions, httpTimeout);
-            return _client.Post<Subscription>(Configuration.SUBSCRIPTIONS_PATH, subscription, requestOptions);
+            return await _client.Post<Subscription>(Configuration.SUBSCRIPTIONS_PATH, subscription, requestOptions);
         }
 
-        public Subscription UpdateSubscription(Subscription subscription, RequestOptions inputOptions, BillingActionPolicy? billingPolicy = null, DateTime? requestedDate = null, bool? isMigrated = null)
+        public async Task<Subscription> UpdateSubscription(Subscription subscription, RequestOptions inputOptions, BillingActionPolicy? billingPolicy = null, DateTime? requestedDate = null, bool? isMigrated = null)
         {
             if (subscription.SubscriptionId.Equals(Guid.Empty))
                 throw new ArgumentException("Subscription#subscriptionId cannot be empty");
@@ -84,10 +85,10 @@ namespace KillBill.Client.Net.Implementations.Managers
             }
 
             var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).Build();
-            return _client.Put<Subscription>(uri, subscription, requestOptions);
+            return await _client.Put<Subscription>(uri, subscription, requestOptions);
         }
 
-        public void CancelSubscription(Guid subscriptionId, RequestOptions inputOptions, DateTime? requestedDate = null, bool? useRequestedDateForBilling = null, EntitlementActionPolicy? entitlementPolicy = null, BillingActionPolicy? billingPolicy = null)
+        public async Task CancelSubscription(Guid subscriptionId, RequestOptions inputOptions, DateTime? requestedDate = null, bool? useRequestedDateForBilling = null, EntitlementActionPolicy? entitlementPolicy = null, BillingActionPolicy? billingPolicy = null)
         {
             var uri = Configuration.SUBSCRIPTIONS_PATH + "/" + subscriptionId;
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
@@ -119,10 +120,10 @@ namespace KillBill.Client.Net.Implementations.Managers
             }
 
             var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).Build();
-            _client.Delete(uri, requestOptions);
+            await _client.Delete(uri, requestOptions);
         }
 
-        public void UncancelSubscription(Guid subscriptionId, RequestOptions inputOptions, Dictionary<string, string> pluginProperties = null)
+        public async Task UncancelSubscription(Guid subscriptionId, RequestOptions inputOptions, Dictionary<string, string> pluginProperties = null)
         {
             if (subscriptionId == Guid.Empty) throw new ArgumentNullException(nameof(subscriptionId));
 
@@ -132,10 +133,10 @@ namespace KillBill.Client.Net.Implementations.Managers
             StorePluginPropertiesAsParams(pluginProperties, ref queryParams);
             var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).Build();
 
-            _client.Put(uri, null, requestOptions);
+            await _client.Put(uri, null, requestOptions);
         }
 
-        public Bundle CreateSubscriptionWithAddOns(Subscription subscription, RequestOptions inputOptions, DateTime? requestedDate = null, int? timeoutSec = null)
+        public async Task<Bundle> CreateSubscriptionWithAddOns(Subscription subscription, RequestOptions inputOptions, DateTime? requestedDate = null, int? timeoutSec = null)
         {
             ValidateSubscription(subscription);
 
@@ -154,10 +155,10 @@ namespace KillBill.Client.Net.Implementations.Managers
             var followLocation = inputOptions.FollowLocation ?? true;
             var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).WithFollowLocation(followLocation).Build();
 
-            return _client.Post<Bundle>(uri, subscription, requestOptions);
+            return await _client.Post<Bundle>(uri, subscription, requestOptions);
         }
 
-        public Bundle CreateSubscriptionsWithAddOns(IEnumerable<Subscription> subscriptions, RequestOptions inputOptions, DateTime? requestedDate = null, int? timeoutSec = null)
+        public async Task<Bundle> CreateSubscriptionsWithAddOns(IEnumerable<Subscription> subscriptions, RequestOptions inputOptions, DateTime? requestedDate = null, int? timeoutSec = null)
         {
             foreach (var subscription in subscriptions)
             {
@@ -179,10 +180,10 @@ namespace KillBill.Client.Net.Implementations.Managers
             var followLocation = inputOptions.FollowLocation ?? true;
             var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).WithFollowLocation(followLocation).Build();
 
-            return _client.Post<Bundle>(uri, subscriptions, requestOptions);
+            return await _client.Post<Bundle>(uri, subscriptions, requestOptions);
         }
 
-        public void BlockSubscription(Guid subscriptionId, BlockingState blockingState, RequestOptions inputOptions, DateTime? requestedDate = null, Dictionary<string, string> pluginProperties = null)
+        public async Task BlockSubscription(Guid subscriptionId, BlockingState blockingState, RequestOptions inputOptions, DateTime? requestedDate = null, Dictionary<string, string> pluginProperties = null)
         {
             if (subscriptionId == Guid.Empty) throw new ArgumentNullException(nameof(subscriptionId));
 
@@ -193,7 +194,7 @@ namespace KillBill.Client.Net.Implementations.Managers
             StorePluginPropertiesAsParams(pluginProperties, ref queryParams);
             var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).Build();
 
-            _client.Put(uri, blockingState, requestOptions);
+            await _client.Put(uri, blockingState, requestOptions);
         }
 
         private void ValidateSubscription(Subscription subscription, bool validateAccount = true)

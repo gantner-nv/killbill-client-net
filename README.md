@@ -1,6 +1,6 @@
 Overview
 ===
-An ASP.NET Core client library for [Killbill](http://killbill.io).
+An ASP.NET Core client library for [Killbill.io](http://killbill.io).
 
 The client library is currently built in **netstandard2.0**.
 
@@ -9,6 +9,8 @@ Background
 This library was forked from the original draft & prototype version which is available on https://github.com/galenp/killbill-client-net.
 
 We converted the library to ASP.NET Core + upgraded, improved and refactored this library so we can make use of it correctly and efficiently.
+
+Keep in mind that not all functionalities of KillBill.io are implemented (yet), so be my guest to contribute...
 
 Getting started
 ===
@@ -40,10 +42,10 @@ Before we can start making use of the Killbill interface, we can easily create a
         .WithComment("kill-bill-test")
         .Build();
 
-And now we can start using it by simply calling the method(s) we need.
+And now we can start using it by simply calling the (async) method(s) we need.
 Eg. find an account by id:
 
-    var account = Client.GetAccount(accountId, requestOptions);
+    var account = await Client.GetAccount(accountId, requestOptions);
 
 History
 ===

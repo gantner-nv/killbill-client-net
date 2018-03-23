@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using KillBill.Client.Net.Configuration;
 using KillBill.Client.Net.Data;
 using KillBill.Client.Net.Extensions;
@@ -31,61 +32,61 @@ namespace KillBill.Client.Net.Implementations
 
         // GET
         // -------------------------------------------------------------------------------
-        public IRestResponse Get(string uri, RequestOptions requestOptions)
+        public async Task<IRestResponse> Get(string uri, RequestOptions requestOptions)
         {
-            return SendRequest(Method.GET, uri, null, requestOptions);
+            return await SendRequest(Method.GET, uri, null, requestOptions);
         }
 
-        public T Get<T>(string uri, RequestOptions requestOptions)
+        public async Task<T> Get<T>(string uri, RequestOptions requestOptions)
             where T : class
         {
-            return SendRequestAndMaybeFollowLocation<T>(Method.GET, uri, null, requestOptions);
+            return await SendRequestAndMaybeFollowLocation<T>(Method.GET, uri, null, requestOptions);
         }
 
         // POST
         // -------------------------------------------------------------------------------
         // - untyped without follow
-        public IRestResponse Post(string uri, object body, RequestOptions requestOptions)
+        public async Task<IRestResponse> Post(string uri, object body, RequestOptions requestOptions)
         {
-            return SendRequest(Method.POST, uri, body, requestOptions);
+            return await SendRequest(Method.POST, uri, body, requestOptions);
         }
 
-        public T Post<T>(string uri, object body, RequestOptions requestOptions)
+        public async Task<T> Post<T>(string uri, object body, RequestOptions requestOptions)
             where T : class
         {
-            return SendRequestAndMaybeFollowLocation<T>(Method.POST, uri, body, requestOptions);
+            return await SendRequestAndMaybeFollowLocation<T>(Method.POST, uri, body, requestOptions);
         }
 
         // PUT
         // -------------------------------------------------------------------------------
         // - untyped without follow
-        public IRestResponse Put(string uri, object body, RequestOptions requestOptions)
+        public async Task<IRestResponse> Put(string uri, object body, RequestOptions requestOptions)
         {
-            return SendRequest(Method.PUT, uri, body, requestOptions);
+            return await SendRequest(Method.PUT, uri, body, requestOptions);
         }
 
-        public T Put<T>(string uri, object body, RequestOptions requestOptions)
+        public async Task<T> Put<T>(string uri, object body, RequestOptions requestOptions)
             where T : class
         {
-            return SendRequestAndMaybeFollowLocation<T>(Method.PUT, uri, body, requestOptions);
+            return await SendRequestAndMaybeFollowLocation<T>(Method.PUT, uri, body, requestOptions);
         }
 
         // DELETE
         // -------------------------------------------------------------------------------
         // - untyped without follow
-        public IRestResponse Delete(string uri, RequestOptions requestOptions)
+        public async Task<IRestResponse> Delete(string uri, RequestOptions requestOptions)
         {
-            return SendRequest(Method.DELETE, uri, null, requestOptions);
+            return await SendRequest(Method.DELETE, uri, null, requestOptions);
         }
 
-        public IRestResponse Delete(string uri, object body, RequestOptions requestOptions)
+        public async Task<IRestResponse> Delete(string uri, object body, RequestOptions requestOptions)
         {
-            return SendRequest(Method.DELETE, uri, body, requestOptions);
+            return await SendRequest(Method.DELETE, uri, body, requestOptions);
         }
 
         // SEND REQUEST
         // -------------------------------------------------------------------------------
-        private IRestResponse SendRequest(Method method, string uri, object body, RequestOptions requestOptions)
+        private async Task<IRestResponse> SendRequest(Method method, string uri, object body, RequestOptions requestOptions)
         {
             var request = BuildRequestWithHeaderAndQuery(method, uri, requestOptions);
 
@@ -94,12 +95,12 @@ namespace KillBill.Client.Net.Implementations
                 if (body != null) AddRequestBody(request, body, requestOptions.ContentType);
             }
 
-            return ExecuteRequest(request, requestOptions);
+            return await ExecuteRequest(request, requestOptions);
         }
 
         // SEND REQUEST MAYBE FOLLOW
         // -------------------------------------------------------------------------------
-        private T SendRequestAndMaybeFollowLocation<T>(Method method, string uri, object body, RequestOptions requestOptions)
+        private async Task<T> SendRequestAndMaybeFollowLocation<T>(Method method, string uri, object body, RequestOptions requestOptions)
             where T : class
         {
             var request = BuildRequestWithHeaderAndQuery(method, uri, requestOptions);
@@ -112,7 +113,7 @@ namespace KillBill.Client.Net.Implementations
             // WHEN FollowLocation == TRUE
             if (requestOptions.FollowLocation == true)
             {
-                var responseToFollow = ExecuteRequest(request, requestOptions);
+                var responseToFollow = await ExecuteRequest(request, requestOptions);
 
                 var locationHeader = responseToFollow?.Headers.SingleOrDefault(
                     h => h.Type == ParameterType.HttpHeader && h.Name == "Location");
@@ -132,10 +133,10 @@ namespace KillBill.Client.Net.Implementations
                                                             .WithQueryParams(requestOptions.QueryParamsForFollow)
                                                             .Build();
 
-                return Get<T>(locationUri.PathAndQuery, optionsForFollow);
+                return await Get<T>(locationUri.PathAndQuery, optionsForFollow);
             }
 
-            var response = ExecuteRequest(request, requestOptions);
+            var response = await ExecuteRequest(request, requestOptions);
 
             // If there is no response (204) or if an object cannot be found (404), the code will return null (for single objects) or an empty list (for collections of objects).
             if (response.StatusCode == HttpStatusCode.NoContent || response.StatusCode == HttpStatusCode.NotFound)
@@ -253,7 +254,7 @@ namespace KillBill.Client.Net.Implementations
             }
         }
 
-        private IRestResponse ExecuteRequest(IRestRequest request, RequestOptions requestOptions)
+        private async Task<IRestResponse> ExecuteRequest(IRestRequest request, RequestOptions requestOptions)
         {
             var baseUri = _config.ServerUrl;
             var client = CreateClient(baseUri, requestOptions);
@@ -261,7 +262,7 @@ namespace KillBill.Client.Net.Implementations
             if (request.Resource.Contains("http"))
                 throw new ArgumentException("Request.Resource should be a relative Uri (/location) and not the full Url (http, domain etc)");
 
-            var response = client.Execute(request);
+            var response = await client.ExecuteTaskAsync(request);
 
             object defaultObject;
             CheckResponse(response, out defaultObject);

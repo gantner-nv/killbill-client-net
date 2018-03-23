@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using KillBill.Client.Net.Model;
 using NUnit.Framework;
 
@@ -10,7 +11,7 @@ namespace KillBill.Client.Net.IntegrationTests.ModificationTests
     {
         [TestCase("tok_154JgSC746zpV9sQFB1h4ACJ")]
         [Ignore("This test was disabled as we are not using payments yet.")]
-        public void Create_PaymentMethod_Stripe(string stripeToken)
+        public async Task Create_PaymentMethod_Stripe(string stripeToken)
         {
             // arrange
             var stripePaymentMethod = new PaymentMethod
@@ -31,7 +32,7 @@ namespace KillBill.Client.Net.IntegrationTests.ModificationTests
             };
 
             // act
-            var paymentMethod = Client.CreatePaymentMethod(stripePaymentMethod, RequestOptions);
+            var paymentMethod = await Client.CreatePaymentMethod(stripePaymentMethod, RequestOptions);
 
             // assert
             Assert.That(paymentMethod, Is.Not.Null);

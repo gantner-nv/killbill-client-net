@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using NUnit.Framework;
 
 namespace KillBill.Client.Net.IntegrationTests.SafeTests
@@ -7,10 +8,10 @@ namespace KillBill.Client.Net.IntegrationTests.SafeTests
     public class InvoiceTests : BaseTestFixture
     {
         [TestCase("5149bcae-f0de-4bc8-9b32-a6e1bc5f83ed")]
-        public void Get_Invoice_By_Id(string invoiceId)
+        public async Task Get_Invoice_By_Id(string invoiceId)
         {
             // act
-            var invoice = Client.GetInvoice(invoiceId, RequestOptions);
+            var invoice = await Client.GetInvoice(invoiceId, RequestOptions);
 
             // assert
             Assert.That(invoice, Is.Not.Null);
@@ -19,10 +20,10 @@ namespace KillBill.Client.Net.IntegrationTests.SafeTests
         }
 
         [TestCase(1)]
-        public void Get_Invoice_By_Number(int invoiceNumber)
+        public async Task Get_Invoice_By_Number(int invoiceNumber)
         {
             // act
-            var invoice = Client.GetInvoice(invoiceNumber, RequestOptions);
+            var invoice = await Client.GetInvoice(invoiceNumber, RequestOptions);
 
             // assert
             Assert.That(invoice, Is.Not.Null);
@@ -31,10 +32,10 @@ namespace KillBill.Client.Net.IntegrationTests.SafeTests
         }
 
         [TestCase("5149bcae-f0de-4bc8-9b32-a6e1bc5f83ed")]
-        public void Search_Invoices_By_InvoiceId(string searchTerm)
+        public async Task Search_Invoices_By_InvoiceId(string searchTerm)
         {
             // act
-            var invoices = Client.SearchInvoices(searchTerm, RequestOptions);
+            var invoices = await Client.SearchInvoices(searchTerm, RequestOptions);
 
             // assert
             Assert.That(invoices, Is.Not.Null);
@@ -44,10 +45,10 @@ namespace KillBill.Client.Net.IntegrationTests.SafeTests
         }
 
         [TestCase("5")]
-        public void Search_Invoices_By_InvoiceNumber(string searchTerm)
+        public async Task Search_Invoices_By_InvoiceNumber(string searchTerm)
         {
             // act
-            var searchResults = Client.SearchInvoices(searchTerm, RequestOptions);
+            var searchResults = await Client.SearchInvoices(searchTerm, RequestOptions);
 
             // assert
             Assert.That(searchResults, Is.Not.Null);

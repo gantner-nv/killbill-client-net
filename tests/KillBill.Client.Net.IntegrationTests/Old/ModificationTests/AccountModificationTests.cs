@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using KillBill.Client.Net.Model;
 using NUnit.Framework;
 
@@ -25,7 +26,7 @@ namespace KillBill.Client.Net.IntegrationTests.ModificationTests
         }
 
         [Test]
-        public void When_UpdatingAccount_Then_TheResultReturnsTheChangedFields()
+        public async Task When_UpdatingAccount_Then_TheResultReturnsTheChangedFields()
         {
             // arrange
             const string newAddress1 = "NEW ADDRESS 1";
@@ -39,7 +40,7 @@ namespace KillBill.Client.Net.IntegrationTests.ModificationTests
             };
 
             // act
-            var updatedAccount = Client.UpdateAccount(updateAccount, RequestOptions);
+            var updatedAccount = await Client.UpdateAccount(updateAccount, RequestOptions);
 
             // assert
             Assert.That(updateAccount, Is.Not.Null);
@@ -48,46 +49,46 @@ namespace KillBill.Client.Net.IntegrationTests.ModificationTests
         }
 
         [Test]
-        public void When_AddingEmailToAccount_Then_TheEmailIsIncludedInTheAccount()
+        public async Task When_AddingEmailToAccount_Then_TheEmailIsIncludedInTheAccount()
         {
             // arrange
             var email = new AccountEmail { AccountId = AccountId, Email = "tester1@test.com" };
 
             // act
-            Client.AddEmailToAccount(email, RequestOptions);
+            await Client.AddEmailToAccount(email, RequestOptions);
 
             // assert
-            var result = Client.GetEmailsForAccount(AccountId, RequestOptions);
+            var result = await Client.GetEmailsForAccount(AccountId, RequestOptions);
             Assert.That(result.Any(e => e.Email == "tester1@test.com"), Is.True);
         }
 
         [Test]
-        public void When_RemovingEmailToAccount_Then_TheEmailIsRemovedFromTheAccount()
+        public async Task When_RemovingEmailToAccount_Then_TheEmailIsRemovedFromTheAccount()
         {
             // arrange
             var email = new AccountEmail { AccountId = AccountId, Email = "tester2@test.com" };
-            Client.AddEmailToAccount(email, RequestOptions);
-            var emails = Client.GetEmailsForAccount(AccountId, RequestOptions);
+            await Client.AddEmailToAccount(email, RequestOptions);
+            var emails = await Client.GetEmailsForAccount(AccountId, RequestOptions);
             Assume.That(emails.Any(e => e.Email == "tester2@test.com"), Is.True);
 
             // act
-            Client.RemoveEmailFromAccount(email, RequestOptions);
+            await Client.RemoveEmailFromAccount(email, RequestOptions);
 
             // assert
-            var result = Client.GetEmailsForAccount(AccountId, RequestOptions);
+            var result = await Client.GetEmailsForAccount(AccountId, RequestOptions);
             Assert.That(result.Any(e => e.Email == "tester2@test.com"), Is.False);
         }
 
         [TestCase(true)]
         [TestCase(false)]
-        public void When_UpdatingEmailNotificationsForAccount_Then_TheSettingsAreReturnedCorrectly(bool notificationSetting)
+        public async Task When_UpdatingEmailNotificationsForAccount_Then_TheSettingsAreReturnedCorrectly(bool notificationSetting)
         {
             // arrange
             var invoiceEmail = new InvoiceEmail { AccountId = AccountId, IsNotifiedForInvoices = notificationSetting };
-            Client.UpdateEmailNotificationsForAccount(invoiceEmail, RequestOptions);
+            await Client.UpdateEmailNotificationsForAccount(invoiceEmail, RequestOptions);
 
             // act
-            var setting = Client.GetEmailNotificationsForAccount(AccountId, RequestOptions);
+            var setting = await Client.GetEmailNotificationsForAccount(AccountId, RequestOptions);
 
             // assert
             Assert.That(setting, Is.Not.Null);

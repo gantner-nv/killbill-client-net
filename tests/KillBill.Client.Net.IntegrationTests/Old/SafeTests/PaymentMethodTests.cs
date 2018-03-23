@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using NUnit.Framework;
 
 namespace KillBill.Client.Net.IntegrationTests.SafeTests
@@ -7,13 +8,13 @@ namespace KillBill.Client.Net.IntegrationTests.SafeTests
     public class PaymentMethodTests : BaseTestFixture
     {
         [TestCase("035ccf7d-8015-4296-97a5-91571321ba1c")]
-        public void Get_PaymentMethod(string paymentMethodString)
+        public async Task Get_PaymentMethod(string paymentMethodString)
         {
             // arrange
             var paymentMethodId = Guid.Parse(paymentMethodString);
 
             // act
-            var paymentMethod = Client.GetPaymentMethod(paymentMethodId, RequestOptions);
+            var paymentMethod = await Client.GetPaymentMethod(paymentMethodId, RequestOptions);
 
             // assert
             Assert.That(paymentMethod, Is.Not.Null);
@@ -21,10 +22,10 @@ namespace KillBill.Client.Net.IntegrationTests.SafeTests
         }
 
         [Test]
-        public void Get_PaymentMethodsForAccount()
+        public async Task Get_PaymentMethodsForAccount()
         {
             // act
-            var paymentMethods = Client.GetPaymentMethodsForAccount(AccountId, RequestOptions);
+            var paymentMethods = await Client.GetPaymentMethodsForAccount(AccountId, RequestOptions);
 
             // assert
             Assert.That(paymentMethods, Is.Not.Null);

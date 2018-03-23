@@ -1,4 +1,5 @@
-﻿using KillBill.Client.Net.Model;
+﻿using System.Threading.Tasks;
+using KillBill.Client.Net.Model;
 using NUnit.Framework;
 
 namespace KillBill.Client.Net.IntegrationTests.ModificationTests
@@ -7,7 +8,7 @@ namespace KillBill.Client.Net.IntegrationTests.ModificationTests
     public class CreditModificationTests : BaseTestFixture
     {
         [Test]
-        public void When_AddingCreditToAccount_Then_TheCreditIsReturnedCorrectly()
+        public async Task When_AddingCreditToAccount_Then_TheCreditIsReturnedCorrectly()
         {
             // arrange
             var credit = new Credit()
@@ -17,7 +18,7 @@ namespace KillBill.Client.Net.IntegrationTests.ModificationTests
             };
 
             // act
-            var processed = Client.CreateCredit(credit, true, RequestOptions);
+            var processed = await Client.CreateCredit(credit, true, RequestOptions);
 
             // assert
             Assert.That(processed, Is.Not.Null);

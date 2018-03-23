@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using KillBill.Client.Net.Data;
 using KillBill.Client.Net.Infrastructure;
 using KillBill.Client.Net.Interfaces;
@@ -23,12 +24,12 @@ namespace KillBill.Client.Net.Model
         public IKbHttpClient KillBillHttpClient { get; set; }
 
         // TODO: revisit this once the java client is updated to use requestOptions
-        public KillBillObjects<T> GetNext(RequestOptions requestOptions)
+        public async Task<KillBillObjects<T>> GetNext(RequestOptions requestOptions)
         {
             if (KillBillHttpClient == null || PaginationNextPageUri == null)
                 return null;
 
-            return KillBillHttpClient.Get<KillBillObjects<T>>(PaginationNextPageUri, requestOptions);
+            return await KillBillHttpClient.Get<KillBillObjects<T>>(PaginationNextPageUri, requestOptions);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using NUnit.Framework;
 
 namespace KillBill.Client.Net.IntegrationTests.ModificationTests
@@ -8,33 +9,33 @@ namespace KillBill.Client.Net.IntegrationTests.ModificationTests
     public class TenantModificationTests : BaseTestFixture
     {
         [Test]
-        public void Register_Notification_Callback()
+        public async Task Register_Notification_Callback()
         {
             // arrange
             var callback = "http://localhost:8080/notsurewhatiexpecttosee";
 
             // act
-            var tenantKey = Client.RegisterCallBackNotificationForTenant(callback, RequestOptions);
+            var tenantKey = await Client.RegisterCallBackNotificationForTenant(callback, RequestOptions);
 
             // assert
             Assert.That(tenantKey, Is.Not.Null);
         }
 
         [TestCase("d632f46a-15cf-409a-83c1-34390b983a12")]
-        public void Unregister_Notification_Callback(string tenantIdString)
+        public async Task Unregister_Notification_Callback(string tenantIdString)
         {
             // arrange
             var tenantId = Guid.Parse(tenantIdString);
 
             // act
-            Client.UnregisterCallbackNotificationForTenant(tenantId, RequestOptions);
+            await Client.UnregisterCallbackNotificationForTenant(tenantId, RequestOptions);
         }
 
         [Test]
-        public void Retrieve_Notification_Callbacks()
+        public async Task Retrieve_Notification_Callbacks()
         {
             // act
-            var tenantKey = Client.GetCallbackNotificationForTenant(RequestOptions);
+            var tenantKey = await Client.GetCallbackNotificationForTenant(RequestOptions);
 
             // assert
             Assert.That(tenantKey, Is.Not.Null); // Because in the above test we registered a new one

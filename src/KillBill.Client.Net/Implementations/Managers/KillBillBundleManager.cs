@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using KillBill.Client.Net.Configuration;
 using KillBill.Client.Net.Data;
@@ -23,13 +24,13 @@ namespace KillBill.Client.Net.Implementations.Managers
         }
 
         // BUNDLE
-        public Bundle GetBundle(Guid bundleId, RequestOptions inputOptions)
+        public async Task<Bundle> GetBundle(Guid bundleId, RequestOptions inputOptions)
         {
             var uri = Configuration.BUNDLES_PATH + "/" + bundleId;
-            return _client.Get<Bundle>(uri, inputOptions);
+            return await _client.Get<Bundle>(uri, inputOptions);
         }
 
-        public Bundle GetBundle(string externalKey, RequestOptions inputOptions)
+        public async Task<Bundle> GetBundle(string externalKey, RequestOptions inputOptions)
         {
             var uri = Configuration.BUNDLES_PATH;
 
@@ -38,12 +39,12 @@ namespace KillBill.Client.Net.Implementations.Managers
 
             var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).Build();
 
-            var bundles = _client.Get<Bundles>(uri, requestOptions);
+            var bundles = await _client.Get<Bundles>(uri, requestOptions);
 
             return bundles?.First();
         }
 
-        public Bundle TransferBundle(Bundle bundle, RequestOptions inputOptions)
+        public async Task<Bundle> TransferBundle(Bundle bundle, RequestOptions inputOptions)
         {
             if (bundle == null)
                 throw new ArgumentNullException(nameof(bundle));
@@ -59,10 +60,10 @@ namespace KillBill.Client.Net.Implementations.Managers
             var followLocation = inputOptions.FollowLocation ?? true;
             var requestOptions = inputOptions.Extend().WithFollowLocation(followLocation).Build();
 
-            return _client.Put<Bundle>(uri, bundle, requestOptions);
+            return await _client.Put<Bundle>(uri, bundle, requestOptions);
         }
 
-        public void BlockBundle(Guid bundleId, BlockingState blockingState, RequestOptions inputOptions, DateTime? requestedDate = null, Dictionary<string, string> pluginProperties = null)
+        public async Task BlockBundle(Guid bundleId, BlockingState blockingState, RequestOptions inputOptions, DateTime? requestedDate = null, Dictionary<string, string> pluginProperties = null)
         {
             if (bundleId == Guid.Empty) throw new ArgumentNullException(nameof(bundleId));
 
@@ -73,10 +74,10 @@ namespace KillBill.Client.Net.Implementations.Managers
             StorePluginPropertiesAsParams(pluginProperties, ref queryParams);
             var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).Build();
 
-            _client.Put(uri, blockingState, requestOptions);
+            await _client.Put(uri, blockingState, requestOptions);
         }
 
-        public void PauseBundle(Guid bundleId, RequestOptions inputOptions, DateTime? requestedDate = null, Dictionary<string, string> pluginProperties = null)
+        public async Task PauseBundle(Guid bundleId, RequestOptions inputOptions, DateTime? requestedDate = null, Dictionary<string, string> pluginProperties = null)
         {
             if (bundleId == Guid.Empty) throw new ArgumentNullException(nameof(bundleId));
 
@@ -87,10 +88,10 @@ namespace KillBill.Client.Net.Implementations.Managers
             StorePluginPropertiesAsParams(pluginProperties, ref queryParams);
             var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).Build();
 
-            _client.Put(uri, null, requestOptions);
+            await _client.Put(uri, null, requestOptions);
         }
 
-        public void ResumeBundle(Guid bundleId, RequestOptions inputOptions, DateTime? requestedDate = null, Dictionary<string, string> pluginProperties = null)
+        public async Task ResumeBundle(Guid bundleId, RequestOptions inputOptions, DateTime? requestedDate = null, Dictionary<string, string> pluginProperties = null)
         {
             if (bundleId == Guid.Empty) throw new ArgumentNullException(nameof(bundleId));
 
@@ -101,28 +102,11 @@ namespace KillBill.Client.Net.Implementations.Managers
             StorePluginPropertiesAsParams(pluginProperties, ref queryParams);
             var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).Build();
 
-            _client.Put(uri, null, requestOptions);
+            await _client.Put(uri, null, requestOptions);
         }
 
         // BUNDLES
-        public Bundles GetAccountBundles(Guid accountId, RequestOptions inputOptions)
-        {
-            var uri = Configuration.ACCOUNTS_PATH + "/" + accountId + "/" + Configuration.BUNDLES;
-            return _client.Get<Bundles>(uri, inputOptions);
-        }
-
-        public Bundles GetAccountBundles(Guid accountId, string externalKey, RequestOptions inputOptions)
-        {
-            var uri = Configuration.ACCOUNTS_PATH + "/" + accountId + "/" + Configuration.BUNDLES;
-
-            var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
-            queryParams.Add(Configuration.QUERY_EXTERNAL_KEY, externalKey);
-            var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).Build();
-
-            return _client.Get<Bundles>(uri, requestOptions);
-        }
-
-        public Bundles GetBundles(RequestOptions inputOptions, long offset = 0L, long limit = 100L, AuditLevel auditLevel = DefaultAuditLevel)
+        public async Task<Bundles> GetBundles(RequestOptions inputOptions, long offset = 0L, long limit = 100L, AuditLevel auditLevel = DefaultAuditLevel)
         {
             var uri = Configuration.BUNDLES_PATH + "/" + Configuration.PAGINATION;
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
@@ -130,10 +114,10 @@ namespace KillBill.Client.Net.Implementations.Managers
             queryParams.Add(Configuration.QUERY_SEARCH_LIMIT, limit.ToString());
             queryParams.Add(Configuration.QUERY_AUDIT, auditLevel.ToString());
             var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).Build();
-            return _client.Get<Bundles>(uri, requestOptions);
+            return await _client.Get<Bundles>(uri, requestOptions);
         }
 
-        public Bundles SearchBundles(string key, RequestOptions inputOptions, long offset = 0L, long limit = 100L, AuditLevel auditLevel = DefaultAuditLevel)
+        public async Task<Bundles> SearchBundles(string key, RequestOptions inputOptions, long offset = 0L, long limit = 100L, AuditLevel auditLevel = DefaultAuditLevel)
         {
             var uri = Configuration.BUNDLES_PATH + "/" + Configuration.SEARCH + "/" + HttpUtility.UrlEncode(key);
 
@@ -144,7 +128,7 @@ namespace KillBill.Client.Net.Implementations.Managers
 
             var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).Build();
 
-            return _client.Get<Bundles>(uri, requestOptions);
+            return await _client.Get<Bundles>(uri, requestOptions);
         }
     }
 }

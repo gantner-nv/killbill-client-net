@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using KillBill.Client.Net.Model;
 using NUnit.Framework;
 
@@ -11,7 +12,7 @@ namespace KillBill.Client.Net.IntegrationTests.ModificationTests
         private readonly string _externalKey = "aaaaa";
 
         [Test]
-        public void Create_New_Subscriptions_WithAddons()
+        public async Task Create_New_Subscriptions_WithAddons()
         {
             // arrange
             var bundleKey = Guid.NewGuid();
@@ -39,14 +40,14 @@ namespace KillBill.Client.Net.IntegrationTests.ModificationTests
             };
 
             // act
-            var bundle = Client.CreateSubscriptionsWithAddOns(subscriptions, RequestOptions);
+            var bundle = await Client.CreateSubscriptionsWithAddOns(subscriptions, RequestOptions);
 
             // assert
             Assert.That(bundle, Is.Not.Null);
         }
 
         [Test]
-        public void Create_New_Subscription_Bundle()
+        public async Task Create_New_Subscription_Bundle()
         {
             // arrange
             var subscription = new Subscription
@@ -61,7 +62,7 @@ namespace KillBill.Client.Net.IntegrationTests.ModificationTests
             };
 
             // act
-            var bundle = Client.CreateSubscription(subscription, RequestOptions);
+            var bundle = await Client.CreateSubscription(subscription, RequestOptions);
 
             // assert
             Assert.That(bundle, Is.Not.Null);
@@ -70,10 +71,10 @@ namespace KillBill.Client.Net.IntegrationTests.ModificationTests
 
         [Test]
         [Ignore("I THINK i've misunderstood bundles<->subscriptions. 9:30am after an all nighter... time to sleep and resume tomorrow... or the day after.")]
-        public void Add_Subscription_To_Bundle()
+        public async Task Add_Subscription_To_Bundle()
         {
             // arrange
-            var existingBundle = Client.GetBundle(_externalKey, RequestOptions);
+            var existingBundle = await Client.GetBundle(_externalKey, RequestOptions);
             Assume.That(existingBundle, Is.Not.Null, "We can't add a second subscription if the bundle doesnt exist... run the above test first.");
 
             var subscription = new Subscription
@@ -89,7 +90,7 @@ namespace KillBill.Client.Net.IntegrationTests.ModificationTests
             };
 
             // act
-            var secondSubcription = Client.CreateSubscription(subscription, RequestOptions);
+            var secondSubcription = await Client.CreateSubscription(subscription, RequestOptions);
 
             // assert
             Assert.That(secondSubcription, Is.Not.Null);

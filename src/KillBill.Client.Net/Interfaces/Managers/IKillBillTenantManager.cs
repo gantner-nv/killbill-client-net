@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using KillBill.Client.Net.Data;
 using KillBill.Client.Net.Model;
 
@@ -7,17 +8,17 @@ namespace KillBill.Client.Net.Interfaces.Managers
     public interface IKillBillTenantManager
     {
         // TENANT
-        Tenant CreateTenant(Tenant tenant, RequestOptions inputOptions, bool useGlobalDefault = true);
+        Task<Tenant> CreateTenant(Tenant tenant, RequestOptions inputOptions, bool useGlobalDefault = true);
 
-        Tenant GetTenant(Guid tenantId, RequestOptions inputOptions);
+        Task<Tenant> GetTenant(Guid tenantId, RequestOptions inputOptions);
 
-        Tenant GetTenant(string apiKey, RequestOptions inputOptions);
-
-        void UnregisterCallbackNotificationForTenant(Guid tenantId, RequestOptions inputOptions);
+        Task<Tenant> GetTenant(string apiKey, RequestOptions inputOptions);
 
         // TENANT KEY
-        TenantKey RegisterCallBackNotificationForTenant(string callback, RequestOptions inputOptions);
+        Task<TenantKey> RegisterCallBackNotificationForTenant(string callback, RequestOptions inputOptions);
 
-        TenantKey GetCallbackNotificationForTenant(RequestOptions inputOptions);
+        Task UnregisterCallbackNotificationForTenant(Guid tenantId, RequestOptions inputOptions);
+
+        Task<TenantKey> GetCallbackNotificationForTenant(RequestOptions inputOptions);
     }
 }

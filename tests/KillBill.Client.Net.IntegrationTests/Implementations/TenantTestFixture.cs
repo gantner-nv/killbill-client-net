@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using NUnit.Framework;
 
 namespace KillBill.Client.Net.IntegrationTests.Implementations
@@ -6,10 +7,10 @@ namespace KillBill.Client.Net.IntegrationTests.Implementations
     public class TenantTestFixture : BaseTestFixture
     {
         [Test]
-        public void When_GettingTenantById_Then_TheCorrectTenantIsReturned()
+        public async Task When_GettingTenantById_Then_TheCorrectTenantIsReturned()
         {
             // arrange
-            var tenant = Client.GetTenant(TenantId, RequestOptions);
+            var tenant = await Client.GetTenant(TenantId, RequestOptions);
 
             // assert
             if (tenant == null)
@@ -21,10 +22,10 @@ namespace KillBill.Client.Net.IntegrationTests.Implementations
         }
 
         [Test]
-        public void When_GettingTenantByApiKey_Then_TheCorrectTenantIsReturned()
+        public async Task When_GettingTenantByApiKey_Then_TheCorrectTenantIsReturned()
         {
             // arrange
-            var tenant = Client.GetTenant(ApiKey, RequestOptions);
+            var tenant = await Client.GetTenant(ApiKey, RequestOptions);
 
             // assert
             if (tenant == null)

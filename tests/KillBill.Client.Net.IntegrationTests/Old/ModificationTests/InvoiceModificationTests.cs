@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using KillBill.Client.Net.Model;
 using NUnit.Framework;
 
@@ -9,7 +10,7 @@ namespace KillBill.Client.Net.IntegrationTests.ModificationTests
     public class InvoiceModificationTests : BaseTestFixture
     {
         [Test]
-        public void When_CreatingExternalCharges_TheyAreCreatedCorrectly()
+        public async Task When_CreatingExternalCharges_TheyAreCreatedCorrectly()
         {
             // arrange
             var externalCharges = new List<InvoiceItem>
@@ -31,7 +32,7 @@ namespace KillBill.Client.Net.IntegrationTests.ModificationTests
             };
 
             // act
-            var invoiceItems = Client.CreateExternalCharges(externalCharges, DateTime.Now, false, false, RequestOptions);
+            var invoiceItems = await Client.CreateExternalCharges(externalCharges, DateTime.Now, false, false, RequestOptions);
 
             // assert
             Assert.That(invoiceItems, Is.Not.Null);

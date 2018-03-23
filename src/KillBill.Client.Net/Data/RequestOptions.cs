@@ -99,6 +99,10 @@ namespace KillBill.Client.Net.Data
             return new RequestOptionsBuilder();
         }
 
+        /// <summary>
+        /// Helper method for extending the builder.
+        /// </summary>
+        /// <returns>A new instance of <see cref="RequestOptionsBuilder"/> containing the existing parameters of the <see cref="RequestOptions"/> object.</returns>
         public RequestOptionsBuilder Extend()
         {
             var builder = new RequestOptionsBuilder();

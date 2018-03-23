@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using KillBill.Client.Net.Configuration;
 using KillBill.Client.Net.Implementations;
 using NUnit.Framework;
@@ -9,7 +10,7 @@ namespace KillBill.Client.Net.IntegrationTests.Implementations
     public class SubscriptionTestFixture
     {
         [Test]
-        public void Given_FollowLocationFalse_When_CreatingSubscription_Then_NoResultIsReturned()
+        public async Task Given_FollowLocationFalse_When_CreatingSubscription_Then_NoResultIsReturned()
         {
             // arrange
             var config = new KillBillConfiguration("https://alb.development.syx-route66.site:9090", "SyxAutomations", "SyxAutomations", "admin", "password");
@@ -22,7 +23,7 @@ namespace KillBill.Client.Net.IntegrationTests.Implementations
                 ExternalKey = "subscriptiontestkey6==" // provide non existing account name
             };
 
-            var createdAccount = client.CreateAccount(account, client.BaseOptions("enviso"));
+            var createdAccount = await client.CreateAccount(account, client.BaseOptions("enviso"));
 
             // create subscription
             var subscription = new KillBill.Client.Net.Model.Subscription
@@ -35,7 +36,7 @@ namespace KillBill.Client.Net.IntegrationTests.Implementations
             var options = client.BaseOptions("enviso").Extend().WithFollowLocation(false).Build();
 
             // act
-            var result = client.CreateSubscription(subscription, options);
+            var result = await client.CreateSubscription(subscription, options);
 
             // assert
             Assert.That(result, Is.Null);

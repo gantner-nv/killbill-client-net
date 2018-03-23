@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using NUnit.Framework;
 
 namespace KillBill.Client.Net.IntegrationTests.Implementations
@@ -7,10 +8,10 @@ namespace KillBill.Client.Net.IntegrationTests.Implementations
     public class AccountTestFixture : BaseTestFixture
     {
         [Test]
-        public void When_GettingAccount_Then_TheCorrectAccountIsReturned()
+        public async Task When_GettingAccount_Then_TheCorrectAccountIsReturned()
         {
             // arrange
-            var account = Client.GetAccount(AccountId, RequestOptions);
+            var account = await Client.GetAccount(AccountId, RequestOptions);
 
             // assert
             if (account == null)
@@ -21,10 +22,10 @@ namespace KillBill.Client.Net.IntegrationTests.Implementations
         }
 
         [Test]
-        public void When_GettingAccounts_Then_OurAccountIsIncludedInTheResult()
+        public async Task When_GettingAccounts_Then_OurAccountIsIncludedInTheResult()
         {
             // act
-            var accounts = Client.GetAccounts(RequestOptions);
+            var accounts = await Client.GetAccounts(RequestOptions);
 
             // assert
             if (!accounts.Any())

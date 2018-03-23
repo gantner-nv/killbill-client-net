@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using KillBill.Client.Net.Configuration;
 using KillBill.Client.Net.Data;
 using KillBill.Client.Net.Infrastructure;
@@ -11,28 +12,28 @@ namespace KillBill.Client.Net.Interfaces
     {
         KillBillConfiguration Configuration { get; }
 
-        IRestResponse Get(string uri, RequestOptions requestOptions);
+        Task<IRestResponse> Get(string uri, RequestOptions requestOptions);
 
-        T Get<T>(string uri, RequestOptions requestOptions)
+        Task<T> Get<T>(string uri, RequestOptions requestOptions)
             where T : class;
 
-        IRestResponse Post(string uri, object body, RequestOptions requestOptions);
+        Task<IRestResponse> Post(string uri, object body, RequestOptions requestOptions);
 
-        T Post<T>(string uri, object body, RequestOptions requestOptions)
+        Task<T> Post<T>(string uri, object body, RequestOptions requestOptions)
             where T : class;
 
-        IRestResponse Put(string uri, object body, RequestOptions requestOptions);
+        Task<IRestResponse> Put(string uri, object body, RequestOptions requestOptions);
 
-        T Put<T>(string uri, object body, RequestOptions requestOptions)
+        Task<T> Put<T>(string uri, object body, RequestOptions requestOptions)
             where T : class;
 
-        // T Put<T>(string uri, object body, MultiMap<string> options, MultiMap<string> optionsForFollow, bool followLocation) where T : class;        
-        // T PutAndFollow<T>(string uri, object body, MultiMap<string> options, MultiMap<string> optionsForFollow) where T : class;
-        IRestResponse Delete(string uri, RequestOptions requestOptions);
+        // Task<T> Put<T>(string uri, object body, MultiMap<string> options, MultiMap<string> optionsForFollow, bool followLocation) where T : class;        
+        // Task<T> PutAndFollow<T>(string uri, object body, MultiMap<string> options, MultiMap<string> optionsForFollow) where T : class;
+        Task<IRestResponse> Delete(string uri, RequestOptions requestOptions);
 
-        IRestResponse Delete(string uri, object body, RequestOptions requestOptions);
+        Task<IRestResponse> Delete(string uri, object body, RequestOptions requestOptions);
 
-        // IRestResponse Delete(string uri, MultiMap<string> options);
-        // IRestResponse Delete(string uri, object body, MultiMap<string> options);       
+        // Task<IRestResponse> Delete(string uri, MultiMap<string> options);
+        // Task<IRestResponse> Delete(string uri, object body, MultiMap<string> options);       
     }
 }

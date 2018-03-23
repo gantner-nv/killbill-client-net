@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using KillBill.Client.Net.Model;
 using NUnit.Framework;
 
@@ -9,7 +10,7 @@ namespace KillBill.Client.Net.IntegrationTests.ModificationTests
     {
         [TestCase("1524e2d3-cd26-4714-a105-e3983dcfded6")]
         [Ignore("This test was disabled as we are not using payments yet.")]
-        public void When_CreatingPaymentMethod_Then_PaymentMethodIsCreatedCorrectly(string paymentMethodString)
+        public async Task When_CreatingPaymentMethod_Then_PaymentMethodIsCreatedCorrectly(string paymentMethodString)
         {
             // arrange
             var paymentMethodId = Guid.Parse(paymentMethodString);
@@ -23,7 +24,7 @@ namespace KillBill.Client.Net.IntegrationTests.ModificationTests
             };
 
             // act
-            var payment = Client.CreatePayment(AccountId, paymentMethodId, paymentTransaction, RequestOptions);
+            var payment = await Client.CreatePayment(AccountId, paymentMethodId, paymentTransaction, RequestOptions);
 
             // assert
             Assert.That(payment, Is.Not.Null);

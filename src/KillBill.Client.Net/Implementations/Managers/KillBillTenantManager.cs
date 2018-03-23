@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using KillBill.Client.Net.Data;
 using KillBill.Client.Net.Infrastructure;
 using KillBill.Client.Net.Interfaces;
@@ -18,7 +19,7 @@ namespace KillBill.Client.Net.Implementations.Managers
         }
 
         // TENANT    
-        public Tenant CreateTenant(Tenant tenant, RequestOptions inputOptions, bool useGlobalDefault = true)
+        public async Task<Tenant> CreateTenant(Tenant tenant, RequestOptions inputOptions, bool useGlobalDefault = true)
         {
             if (tenant == null)
                 throw new ArgumentNullException(nameof(tenant));
@@ -30,44 +31,45 @@ namespace KillBill.Client.Net.Implementations.Managers
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
             queryParams.Add(Configuration.QUERY_TENANT_USE_GLOBAL_DEFAULT, useGlobalDefault.ToString());
             var requestOptions = inputOptions.Extend().WithFollowLocation(followLocation).WithQueryParams(queryParams).Build();
-            return _client.Post<Tenant>(Configuration.TENANTS_PATH, tenant, requestOptions);
+            return await _client.Post<Tenant>(Configuration.TENANTS_PATH, tenant, requestOptions);
         }
 
-        public Tenant GetTenant(Guid tenantId, RequestOptions inputOptions)
+        public async Task<Tenant> GetTenant(Guid tenantId, RequestOptions inputOptions)
         {
             var uri = Configuration.TENANTS_PATH + "/" + tenantId;
-            return _client.Get<Tenant>(uri, inputOptions);
+            return await _client.Get<Tenant>(uri, inputOptions);
         }
 
-        public Tenant GetTenant(string apiKey, RequestOptions inputOptions)
+        public async Task<Tenant> GetTenant(string apiKey, RequestOptions inputOptions)
         {
             var uri = Configuration.TENANTS_PATH;
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
             queryParams.Add(Configuration.QUERY_API_KEY, apiKey);
             var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).Build();
-            return _client.Get<Tenant>(uri, requestOptions);
+            return await _client.Get<Tenant>(uri, requestOptions);
         }
 
-        public void UnregisterCallbackNotificationForTenant(Guid tenantId, RequestOptions inputOptions)
-        {
-            var uri = Configuration.TENANTS_PATH + "/" + Configuration.LEGACY_REGISTER_NOTIFICATION_CALLBACK;
-            _client.Delete(uri, inputOptions);
-        }
-
-        public TenantKey RegisterCallBackNotificationForTenant(string callback, RequestOptions inputOptions)
+        // TENANT KEY
+        public async Task<TenantKey> RegisterCallBackNotificationForTenant(string callback, RequestOptions inputOptions)
         {
             var uri = Configuration.TENANTS_PATH + "/" + Configuration.REGISTER_NOTIFICATION_CALLBACK;
             var followLocation = inputOptions.FollowLocation ?? true;
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
             queryParams.Add(Configuration.QUERY_NOTIFICATION_CALLBACK, callback);
             var requestOptions = inputOptions.Extend().WithFollowLocation(followLocation).WithQueryParams(queryParams).Build();
-            return _client.Post<TenantKey>(uri, null, requestOptions);
+            return await _client.Post<TenantKey>(uri, null, requestOptions);
         }
 
-        public TenantKey GetCallbackNotificationForTenant(RequestOptions inputOptions)
+        public async Task UnregisterCallbackNotificationForTenant(Guid tenantId, RequestOptions inputOptions)
+        {
+            var uri = Configuration.TENANTS_PATH + "/" + Configuration.LEGACY_REGISTER_NOTIFICATION_CALLBACK;
+            await _client.Delete(uri, inputOptions);
+        }
+
+        public async Task<TenantKey> GetCallbackNotificationForTenant(RequestOptions inputOptions)
         {
             var uri = Configuration.TENANTS_PATH + "/" + Configuration.REGISTER_NOTIFICATION_CALLBACK;
-            return _client.Get<TenantKey>(uri, inputOptions);
+            return await _client.Get<TenantKey>(uri, inputOptions);
         }
     }
 }

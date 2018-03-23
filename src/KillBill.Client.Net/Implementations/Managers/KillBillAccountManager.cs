@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web;
 using KillBill.Client.Net.Configuration;
 using KillBill.Client.Net.Data;
@@ -21,7 +22,7 @@ namespace KillBill.Client.Net.Implementations.Managers
             _client = client;
         }
 
-        public Account GetAccount(Guid accountId, RequestOptions inputOptions, bool withBalance = false, bool withCba = false)
+        public async Task<Account> GetAccount(Guid accountId, RequestOptions inputOptions, bool withBalance = false, bool withCba = false)
         {
             var uri = Configuration.ACCOUNTS_PATH + "/" + accountId;
 
@@ -30,10 +31,10 @@ namespace KillBill.Client.Net.Implementations.Managers
             queryParams.Add(Configuration.QUERY_ACCOUNT_WITH_BALANCE_AND_CBA, withCba ? "true" : "false");
 
             var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).Build();
-            return _client.Get<Account>(uri, requestOptions);
+            return await _client.Get<Account>(uri, requestOptions);
         }
 
-        public Account GetAccount(string externalKey, RequestOptions inputOptions, bool withBalance = false, bool withCba = false)
+        public async Task<Account> GetAccount(string externalKey, RequestOptions inputOptions, bool withBalance = false, bool withCba = false)
         {
             var uri = Configuration.ACCOUNTS_PATH;
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
@@ -41,31 +42,31 @@ namespace KillBill.Client.Net.Implementations.Managers
             queryParams.Add(Configuration.QUERY_ACCOUNT_WITH_BALANCE, withBalance ? "true" : "false");
             queryParams.Add(Configuration.QUERY_ACCOUNT_WITH_BALANCE_AND_CBA, withCba ? "true" : "false");
             var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).Build();
-            return _client.Get<Account>(uri, requestOptions);
+            return await _client.Get<Account>(uri, requestOptions);
         }
 
-        public Account CreateAccount(Account account, RequestOptions inputOptions)
+        public async Task<Account> CreateAccount(Account account, RequestOptions inputOptions)
         {
             var followLocation = inputOptions.FollowLocation ?? true;
             var requestOptions = inputOptions.Extend().WithFollowLocation(followLocation).Build();
-            return _client.Post<Account>(Configuration.ACCOUNTS_PATH, account, requestOptions);
+            return await _client.Post<Account>(Configuration.ACCOUNTS_PATH, account, requestOptions);
         }
 
-        public Account UpdateAccount(Account account, RequestOptions inputOptions)
+        public async Task<Account> UpdateAccount(Account account, RequestOptions inputOptions)
         {
-            return UpdateAccount(account, false, inputOptions);
+            return await UpdateAccount(account, false, inputOptions);
         }
 
-        public Account UpdateAccount(Account account, bool treatNullAsReset, RequestOptions inputOptions)
+        public async Task<Account> UpdateAccount(Account account, bool treatNullAsReset, RequestOptions inputOptions)
         {
             var uri = Configuration.ACCOUNTS_PATH + "/" + account.AccountId;
             var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
             queryParams.Add(Configuration.QUERY_ACCOUNT_TREAT_NULL_AS_RESET, treatNullAsReset ? "true" : "false");
             var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).Build();
-            return _client.Put<Account>(uri, account, requestOptions);
+            return await _client.Put<Account>(uri, account, requestOptions);
         }
 
-        public void BlockAccount(Guid accountId, BlockingState blockingState, RequestOptions inputOptions, DateTime? requestedDate = null, Dictionary<string, string> pluginProperties = null)
+        public async Task BlockAccount(Guid accountId, BlockingState blockingState, RequestOptions inputOptions, DateTime? requestedDate = null, Dictionary<string, string> pluginProperties = null)
         {
             if (accountId == Guid.Empty) throw new ArgumentNullException(nameof(accountId));
 
@@ -76,16 +77,16 @@ namespace KillBill.Client.Net.Implementations.Managers
             StorePluginPropertiesAsParams(pluginProperties, ref queryParams);
             var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).Build();
 
-            _client.Put(uri, blockingState, requestOptions);
+            await _client.Put(uri, blockingState, requestOptions);
         }
 
         // ACCOUNTS
-        public Accounts GetAccounts(RequestOptions inputOptions)
+        public async Task<Accounts> GetAccounts(RequestOptions inputOptions)
         {
-            return GetAccounts(0L, 100L, inputOptions);
+            return await GetAccounts(0L, 100L, inputOptions);
         }
 
-        public Accounts GetAccounts(long offset, long limit, RequestOptions inputOptions, AuditLevel auditLevel = AuditLevel.NONE)
+        public async Task<Accounts> GetAccounts(long offset, long limit, RequestOptions inputOptions, AuditLevel auditLevel = AuditLevel.NONE)
         {
             var uri = Configuration.ACCOUNTS_PATH + "/" + Configuration.PAGINATION;
 
@@ -96,17 +97,17 @@ namespace KillBill.Client.Net.Implementations.Managers
 
             var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).Build();
 
-            return _client.Get<Accounts>(uri, requestOptions);
+            return await _client.Get<Accounts>(uri, requestOptions);
         }
 
         // ACCOUNT EMAILS
-        public AccountEmails GetEmailsForAccount(Guid accountId, RequestOptions inputOptions)
+        public async Task<AccountEmails> GetEmailsForAccount(Guid accountId, RequestOptions inputOptions)
         {
             var uri = Configuration.ACCOUNTS_PATH + "/" + accountId + "/" + Configuration.EMAILS;
-            return _client.Get<AccountEmails>(uri, inputOptions);
+            return await _client.Get<AccountEmails>(uri, inputOptions);
         }
 
-        public void AddEmailToAccount(AccountEmail email, RequestOptions inputOptions)
+        public async Task AddEmailToAccount(AccountEmail email, RequestOptions inputOptions)
         {
             if (email == null)
                 throw new ArgumentNullException(nameof(email));
@@ -116,10 +117,10 @@ namespace KillBill.Client.Net.Implementations.Managers
 
             var uri = Configuration.ACCOUNTS_PATH + "/" + email.AccountId + "/" + Configuration.EMAILS;
 
-            _client.Post(uri, email, inputOptions);
+            await _client.Post(uri, email, inputOptions);
         }
 
-        public void RemoveEmailFromAccount(AccountEmail email, RequestOptions inputOptions)
+        public async Task RemoveEmailFromAccount(AccountEmail email, RequestOptions inputOptions)
         {
             if (email == null)
                 throw new ArgumentNullException(nameof(email));
@@ -129,11 +130,11 @@ namespace KillBill.Client.Net.Implementations.Managers
 
             var uri = Configuration.ACCOUNTS_PATH + "/" + email.AccountId + "/" + Configuration.EMAILS + "/" + HttpUtility.UrlEncode(email.Email);
 
-            _client.Delete(uri, inputOptions);
+            await _client.Delete(uri, inputOptions);
         }
 
         // ACCOUNT TIMELINE
-        public AccountTimeline GetAccountTimeline(Guid accountId, RequestOptions inputOptions, AuditLevel auditLevel = DefaultAuditLevel)
+        public async Task<AccountTimeline> GetAccountTimeline(Guid accountId, RequestOptions inputOptions, AuditLevel auditLevel = DefaultAuditLevel)
         {
             var uri = Configuration.ACCOUNTS_PATH + "/" + accountId + "/" + Configuration.TIMELINE;
 
@@ -141,7 +142,25 @@ namespace KillBill.Client.Net.Implementations.Managers
             queryParams.Add(Configuration.QUERY_AUDIT, auditLevel.ToString());
             var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).Build();
 
-            return _client.Get<AccountTimeline>(uri, requestOptions);
+            return await _client.Get<AccountTimeline>(uri, requestOptions);
+        }
+
+        // ACCOUNT BUNDLES
+        public async Task<Bundles> GetAccountBundles(Guid accountId, RequestOptions inputOptions)
+        {
+            var uri = Configuration.ACCOUNTS_PATH + "/" + accountId + "/" + Configuration.BUNDLES;
+            return await _client.Get<Bundles>(uri, inputOptions);
+        }
+
+        public async Task<Bundles> GetAccountBundles(Guid accountId, string externalKey, RequestOptions inputOptions)
+        {
+            var uri = Configuration.ACCOUNTS_PATH + "/" + accountId + "/" + Configuration.BUNDLES;
+
+            var queryParams = new MultiMap<string>().Create(inputOptions.QueryParams);
+            queryParams.Add(Configuration.QUERY_EXTERNAL_KEY, externalKey);
+            var requestOptions = inputOptions.Extend().WithQueryParams(queryParams).Build();
+
+            return await _client.Get<Bundles>(uri, requestOptions);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Threading.Tasks;
 using KillBill.Client.Net.Model;
 using NUnit.Framework;
 
@@ -13,7 +14,7 @@ namespace KillBill.Client.Net.IntegrationTests.Init
         /// </summary>
         [Test]
         [Ignore("This test should only be run manually to create a new tenant.")]
-        public void Create_Tenant()
+        public async Task Create_Tenant()
         {
             // arrange
             var apiKey = Configuration.ApiKey;
@@ -26,7 +27,7 @@ namespace KillBill.Client.Net.IntegrationTests.Init
             };
 
             // act
-            var newTenant = Client.CreateTenant(tenant, RequestOptions);
+            var newTenant = await Client.CreateTenant(tenant, RequestOptions);
 
             // assert
             Assert.That(newTenant, Is.Not.Null);
@@ -40,7 +41,7 @@ namespace KillBill.Client.Net.IntegrationTests.Init
         /// </summary>
         [Test]
         [Ignore("This test should only be run manually to create a new account.")]
-        public void Create_Account()
+        public async Task Create_Account()
         {
             // arrange
             var account = new Account()
@@ -54,7 +55,7 @@ namespace KillBill.Client.Net.IntegrationTests.Init
             };
 
             // arrange
-            var createdAccount = Client.CreateAccount(account, RequestOptions);
+            var createdAccount = await Client.CreateAccount(account, RequestOptions);
 
             // assert
             Assert.That(createdAccount, Is.Not.Null);
