@@ -45,8 +45,6 @@ namespace KillBill.Client.Net.Model
 
         public bool IsMigrated { get; set; }
 
-        public bool IsNotifiedForInvoices { get; set; }
-
         public double AccountBalance { get; set; }
 
         public override string ToString()
@@ -73,7 +71,6 @@ namespace KillBill.Client.Net.Model
             sb.Append(", locale='").Append(Locale).Append('\'');
             sb.Append(", phone='").Append(Phone).Append('\'');
             sb.Append(", isMigrated=").Append(IsMigrated);
-            sb.Append(", isNotifiedForInvoices=").Append(IsNotifiedForInvoices);
             sb.Append('}');
             return sb.ToString();
         }

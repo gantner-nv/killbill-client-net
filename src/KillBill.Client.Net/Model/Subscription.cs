@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using KillBill.Client.Net.JSON;
 using Newtonsoft.Json;
 
@@ -10,9 +9,9 @@ namespace KillBill.Client.Net.Model
     {
         public Guid AccountId { get; set; }
 
-        public Guid BundleId { get; set; }
+        public Guid? BundleId { get; set; }
 
-        public Guid SubscriptionId { get; set; }
+        public Guid? SubscriptionId { get; set; }
 
         public string ExternalKey { get; set; }
 
@@ -44,9 +43,5 @@ namespace KillBill.Client.Net.Model
         public DateTime? BillingEndDate { get; set; }
 
         public List<EventSubscription> Events { get; set; }
-
-        public List<NewEventSubscription> NewEvents { get; set; }
-
-        public List<DeletedEventSubscription> DeletedEvents { get; set; }
     }
 }

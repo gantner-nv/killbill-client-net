@@ -168,19 +168,19 @@ namespace KillBill.Client.Net.Implementations
                 if (objects == null)
                     return obj;
 
-                var paginationCurrentOffset = response.Headers.GetValue(_config.HDR_PAGINATION_CURRENT_OFFSET);
+                var paginationCurrentOffset = response.GetValue(_config.HDR_PAGINATION_CURRENT_OFFSET);
                 if (paginationCurrentOffset != null)
                     objects.PaginationCurrentOffset = paginationCurrentOffset.ToInt();
 
-                var paginationNextOffset = response.Headers.GetValue(_config.HDR_PAGINATION_NEXT_OFFSET);
+                var paginationNextOffset = response.GetValue(_config.HDR_PAGINATION_NEXT_OFFSET);
                 if (paginationNextOffset != null)
                     objects.PaginationNextOffset = paginationNextOffset.ToInt();
 
-                var paginationMaxNbRecords = response.Headers.GetValue(_config.HDR_PAGINATION_MAX_NB_RECORDS);
+                var paginationMaxNbRecords = response.GetValue(_config.HDR_PAGINATION_MAX_NB_RECORDS);
                 if (paginationMaxNbRecords != null)
                     objects.PaginationMaxNbRecords = paginationMaxNbRecords.ToInt();
 
-                var paginationNextPageUri = response.Headers.GetValue(_config.HDR_PAGINATION_NEXT_PAGE_URI);
+                var paginationNextPageUri = response.GetValue(_config.HDR_PAGINATION_NEXT_PAGE_URI);
                 if (paginationNextPageUri != null)
                     objects.PaginationNextPageUri = paginationNextPageUri;
 
@@ -244,7 +244,7 @@ namespace KillBill.Client.Net.Implementations
                 default:
                     try
                     {
-                        request.AddBody(body);
+                        request.AddJsonBody(body);
                         return;
                     }
                     catch (Exception ex)
@@ -262,7 +262,7 @@ namespace KillBill.Client.Net.Implementations
             if (request.Resource.Contains("http"))
                 throw new ArgumentException("Request.Resource should be a relative Uri (/location) and not the full Url (http, domain etc)");
 
-            var response = await client.ExecuteTaskAsync(request);
+            var response = await client.ExecuteAsync(request);
 
             object defaultObject;
             CheckResponse(response, out defaultObject);
