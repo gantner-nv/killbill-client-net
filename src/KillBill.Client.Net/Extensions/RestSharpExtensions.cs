@@ -1,15 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using RestSharp;
 
 namespace KillBill.Client.Net.Extensions
 {
     public static class RestSharpExtensions
     {
-        public static string GetValue(this IList<Parameter> headers, string key)
+        public static string GetValue(this IRestResponse response, string key)
         {
-            var hdr = headers.FirstOrDefault(x => x.Name.ToString() == key);
+            var hdr = response.Headers.FirstOrDefault(x => x.Name.ToString() == key);
             return hdr == null ? null : hdr.Value.ToString();
         }
 
