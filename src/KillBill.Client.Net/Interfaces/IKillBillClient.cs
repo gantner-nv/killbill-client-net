@@ -13,7 +13,8 @@ namespace KillBill.Client.Net.Interfaces
                                        IKillBillBundleManager,
                                        IKillBillInvoiceManager,
                                        IKillBillPaymentManager,
-                                       IKillBillNotificationManager
+                                       IKillBillNotificationManager,
+                                       IKillBillUsageManager
     {
         // REQUEST OPTIONS
         RequestOptions BaseOptions(string createdBy = null, string requestId = null, string reason = null, string comment = null);
