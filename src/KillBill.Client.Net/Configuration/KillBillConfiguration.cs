@@ -214,6 +214,13 @@ namespace KillBill.Client.Net.Configuration
             get { return PREFIX + "/" + TENANTS; }
         }
 
+        public string USAGES { get; set; } = "usages";
+        
+        public string USAGES_PATH
+        {
+            get { return PREFIX + "/" + USAGES; }
+        }
+
         public string TIMELINE { get; set; } = "timeline";
 
         public string UNCANCEL { get; set; } = "uncancel";

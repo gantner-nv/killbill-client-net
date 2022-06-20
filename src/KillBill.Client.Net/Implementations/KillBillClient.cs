@@ -26,6 +26,7 @@ namespace KillBill.Client.Net.Implementations
         private readonly KillBillPaymentManager _paymentManager;
         private readonly KillBillSubscriptionManager _subscriptionManager;
         private readonly KillBillTenantManager _tenantManager;
+        private readonly KillBillUsageManager _usageManager;
 
         public KillBillClient(KillBillConfiguration configuration)
         {
@@ -40,6 +41,7 @@ namespace KillBill.Client.Net.Implementations
             _paymentManager = new KillBillPaymentManager(client);
             _subscriptionManager = new KillBillSubscriptionManager(client);
             _tenantManager = new KillBillTenantManager(client);
+            _usageManager = new KillBillUsageManager(client);
         }
 
         public RequestOptions BaseOptions(string createdBy = null, string requestId = null, string reason = null, string comment = null)
@@ -417,6 +419,16 @@ namespace KillBill.Client.Net.Implementations
         public async Task<TenantKey> GetCallbackNotificationForTenant(RequestOptions inputOptions)
         {
             return await _tenantManager.GetCallbackNotificationForTenant(inputOptions);
+        }
+
+        public async Task<UsageRecordRequest> RecordUsage(UsageRecordRequest usage, RequestOptions inputOptions)
+        {
+            return await _usageManager.RecordUsage(usage, inputOptions);
+        }
+
+        public async Task<UsageRecord> GetRecordedUsage(Guid subscritionId, RequestOptions inputOptions)
+        {
+            return await _usageManager.GetRecordedUsage(subscritionId, inputOptions);
         }
     }
 }

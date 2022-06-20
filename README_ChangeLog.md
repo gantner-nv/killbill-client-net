@@ -1,4 +1,7 @@
 # Change log
+## Version 2.1.0
+* Add Usage methods 
+
 ## Version 1.1.0
 * Converted the IKillBillClient to work asynchronously. As a result all requests to the KillBill API will be executed async.
 
